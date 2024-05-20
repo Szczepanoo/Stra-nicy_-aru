@@ -1,2 +1,2 @@
-# Stra-nicy_-aru
+# Straznicy_Zaru
 C++ game
