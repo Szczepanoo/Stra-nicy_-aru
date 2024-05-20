@@ -48,8 +48,20 @@ void displayStatus(Firefighter &ff, Dragon &dragon) {
     cout << "Status Smoka: Zdrowie = " << dragon.health << endl;
 }
 
-void fight(){
-    cout << "pass";
+int fight(Firefighter &player, Dragon &dragon){
+    while (player.health >= 0 && dragon.health > 0) {
+        player.health -= dragon.damage;
+        dragon.health -= 10;
+        dragon.attack();
+        cout << "Zadajesz 10 obrazen smokowi!" << endl;
+        if (player.health <= 0) {
+            cout << "Zostales pokonany przez smoka. Gra skonczona." << endl;
+            return -1;
+        } else if (dragon.health <= 0) {
+            cout << "Pokonales smoka! Wygrałes gre!" << endl;
+            return 1;
+        }
+    }
 }
 
 int main() {
@@ -107,15 +119,7 @@ int main() {
 
         switch (choice) {
             case 1:
-                player.health -= dragon.damage;
-                dragon.health -= 10;
-                dragon.attack();
-                cout << "Zadajesz 10 obrazen smokowi!" << endl;
-                if (player.health <= 0) {
-                    cout << "Zostałes pokonany przez smoka. Gra skonczona." << endl;
-                    gameOver = true;
-                } else if (dragon.health <= 0) {
-                    cout << "Pokonales smoka! Wygrałes gre!" << endl;
+                if (fight(player,dragon) < 0){
                     gameOver = true;
                 }
                 break;
