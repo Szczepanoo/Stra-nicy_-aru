@@ -61,7 +61,7 @@ public:
     int medkits;
 
 
-    Firefighter() : health(120), max_health(120), water(100), experience(0), extinguisher_lvl(0), waterBomb_lvl(0), waterBomb_amt(0), medkits(0){}
+    Firefighter() : name(""), health(120), max_health(120), water(100), experience(0), extinguisher_lvl(0), waterBomb_lvl(0), waterBomb_amt(0), medkits(0){}
 
     void useExtinguisher() {
         if (water > 0) {
@@ -223,46 +223,57 @@ int main() {
     bool gameOver = false;
     while (!gameOver) {
         if (player.experience == 0){
-            system("cls");
-            print_letter_by_letter("Witaj w miescie Pyroklas!");
-            sleep(500);
-            print_letter_by_letter("Codzienne zycie splata sie tu z cieniem niebezpieczenstwa unoszacego sie w powietrzu. "
-                                   "W miasteczku, gdzie smoki nie sa legenda, ale rzeczywistoscia. "
-                                   "Ostatnio jednak atmosfera napiecia narasta, a grozba zlowrogich pozarow staje sie coraz bardziej realna. "
-                                   "Jako mlody adept pozarnictwa wstepujesz w szeregi lokalnej jednostki strazy pozarnej, aby wesprzec ich w dzialaniach.");
+//            system("cls");
+//            print_letter_by_letter("Witaj w miescie Pyroklas!");
+//            sleep(500);
+//            print_letter_by_letter("Codzienne zycie splata sie tu z cieniem niebezpieczenstwa unoszacego sie w powietrzu. "
+//                                   "W miasteczku, gdzie smoki nie sa legenda, ale rzeczywistoscia. "
+//                                   "Ostatnio jednak atmosfera napiecia narasta, a grozba zlowrogich pozarow staje sie coraz bardziej realna. "
+//                                   "Jako mlody adept pozarnictwa wstepujesz w szeregi lokalnej jednostki strazy pozarnej, aby wesprzec ich w dzialaniach.");
+//            sleep(2000);
+//            cout << "[---GLOWNA SIEDZIBA STRAZNIKOW ZARU---]" << endl;
+//            cout << "Dowodca Strazakow Samuel: ";
+//            print_letter_by_letter("Witaj swiezaku, jestem Sam i dowodze tymi oszolomami.");
+//            sleep(3000);
+//            print_letter_by_letter("To jest Franek, poznajcie sie, wdrozy Cie w nasze szeregi i oprowadzi po jednostce.");
+//            cout << "Starszy Strazak Franciszek: ";
+//            print_letter_by_letter("Czesc mlody, na poczatek, trzymaj podstawowy przedmiot kazdego strazaka");
+//            sleep(500);
+//            player.extinguisher_lvl+=5;
+//            cout << "[+] DODANO PRZEDMIOT: ZWYKLA GASNICA" << endl;
+//            sleep(500);
+//            cout << "Starszy Strazak Franciszek: ";
+//            print_letter_by_letter("W tych czasach kazdy z nas nosi pod reka swoja gasnice. "
+//                                   "To narzedzie ktore najlepiej sprawdza sie w ratowaniu cywili, ale od biedy moze tez "
+//                                   "sluzyc w walce ze smokami.");
+//            sleep(1000);
+//            cout << "Starszy Strazak Franciszek: ";
+//            print_letter_by_letter("Pozwol, ze oprowadze Cie teraz po naszej centrali...");
+//            cout << "[TRACHHH!]" << endl;
+//            sleep(2000);
+//            cout << "Dowodca Strazakow Samuel: ";
+//            print_letter_by_letter("SLYSZELISCIE TO!? TO NIKCZEMNIUCH! Myslalem ze ostatnim razem udalo nam sie go pokonac, "
+//                                   "ale wyglada na to za powrocil! Franek, bierz nowego i zajmijcie sie nim. Ja zbiore chlopakow i "
+//                                   "zaraz do was dolaczymy!");
+//            cout << "Starszy Strazak Franciszek: ";
+//            print_letter_by_letter("Za mna mlody, wydaje mi sie, ze wyladowal na dachu. Pamietaj o gasnicy! ");
+//            sleep(3000);
+//            cout << "[---GLOWNA SIEDZIBA STRAZNIKOW ZARU - DACH---]" << endl;
+//            cout << "Starszy Strazak Franciszek: ";
+//            print_letter_by_letter("Acha! Jest tutaj! Do dziela mlody!");
+//            fight(player,Nikczemniuch);
             sleep(2000);
-            cout << "[---GLOWNA SIEDZIBA STRAZNIKOW ZARU---]" << endl;
             cout << "Dowodca Strazakow Samuel: ";
-            print_letter_by_letter("Witaj swiezaku, jestem Sam i dowodze tymi oszolomami.");
-            sleep(3000);
-            print_letter_by_letter("To jest Franek, poznajcie sie, wdrozy Cie w nasze szeregi i oprowadzi po jednostce.");
-            cout << "Starszy Strazak Franciszek: ";
-            print_letter_by_letter("Czesc mlody, na poczatek, trzymaj podstawowy przedmiot kazdego strazaka");
-            sleep(500);
-            player.extinguisher_lvl+=5;
-            cout << "[+] DODANO PRZEDMIOT: ZWYKLA GASNICA" << endl;
-            sleep(500);
-            cout << "Starszy Strazak Franciszek: ";
-            print_letter_by_letter("W tych czasach kazdy z nas nosi pod reka swoja gasnice. "
-                                   "To narzedzie ktore najlepiej sprawdza sie w ratowaniu cywili, ale od biedy moze tez "
-                                   "sluzyc w walce ze smokami.");
+            print_letter_by_letter("Psia kostka! Cale szczescie zyjecie! I.. to... Nikczemniuch!? Pokonany?! "
+                                   "Musze przyznac niezle wam poszlo!");
             sleep(1000);
             cout << "Starszy Strazak Franciszek: ";
-            print_letter_by_letter("Pozwol, ze oprowadze Cie teraz po naszej centrali...");
-            cout << "[TRACHHH!]" << endl;
-            sleep(2000);
-            cout << "Dowodca Strazakow Samuel: ";
-            print_letter_by_letter("SLYSZELISCIE TO!? TO NIKCZEMNIUCH! Myslalem ze ostatnim razem udalo nam sie go pokonac, "
-                                   "ale wyglada na to za powrocil! Franek, bierz nowego i zajmijcie sie nim. Ja zbiore chlopakow i "
-                                   "zaraz do was dolaczymy!");
-            cout << "Starszy Strazak Franciszek: ";
-            print_letter_by_letter("Za mna mlody, wydaje mi sie, ze wyladowal na dachu. Pamietaj o gasnicy! ");
-            sleep(3000);
-            cout << "[---GLOWNA SIEDZIBA STRAZNIKOW ZARU - DACH---]" << endl;
-            cout << "Starszy Strazak Franciszek: ";
-            print_letter_by_letter("Acha! Jest tutaj! Do dziela mlody!");
-            fight(player,Nikczemniuch);
-
+            print_letter_by_letter("Z calym szacunkiem kapitanie, ale to zasluga mlodego. Moj udzial w tej walce byl znikomy");
+            sleep(1000);
+            cout << "Dowodca Strazakow Samuel:";
+            print_letter_by_letter("Ach tak? To w takim razie moze powiedz jak Ci na imie swiezy?");
+            getline(cin, player.name);
+            cout << player.name;
 
 
 
