@@ -7,6 +7,11 @@
 
 using namespace std;
 
+void sleep(int time_ms){
+    this_thread::sleep_for(chrono::milliseconds(time_ms));
+}
+
+
 // Klasa reprezentująca smoka
 class Dragon {
 public:
@@ -54,6 +59,7 @@ void displayStatus(Firefighter &ff, Dragon &dragon) {
 }
 
 int fight(Firefighter &player, Dragon &dragon) {
+
     while (player.health >= 0 && dragon.health > 0) {
         player.health -= dragon.damage;
         dragon.health -= player.damage;
@@ -72,10 +78,11 @@ int fight(Firefighter &player, Dragon &dragon) {
 void print_letter_by_letter(string string){
     for (int i = 0; i < string.length(); i ++){
         cout << string[i] << flush;
-        this_thread::sleep_for(chrono::milliseconds(50));
+        sleep(50);
     }
     cout << endl;
 }
+
 
 int main() {
     srand(time(0));
@@ -116,30 +123,48 @@ int main() {
 
     bool gameOver = false;
     while (!gameOver) {
-        Dragon dragon("Wladca Zaru", 100, 20);
+        Dragon Wladca_Zaru("Wladca Zaru", 10000, 250);
+        Dragon Nikczemniuch("Nikczemniuch",60,15);
         if (player.experience == 0){
             system("cls");
             print_letter_by_letter("Witaj w miescie Pyroklas!");
-            this_thread::sleep_for(chrono::milliseconds(500));
+            sleep(500);
             print_letter_by_letter("Codzienne zycie splata sie tu z cieniem niebezpieczenstwa unoszacego sie w powietrzu. "
                                    "W miasteczku, gdzie smoki nie sa legenda, ale rzeczywistoscia. "
                                    "Ostatnio jednak atmosfera napiecia narasta, a grozba zlowrogich pozarow staje sie coraz bardziej realna. "
                                    "Jako mlody adept pozarnictwa wstepujesz w szeregi lokalnej jednostki strazy pozarnej, aby wesprzec ich w dzialaniach.");
-            this_thread::sleep_for(chrono::seconds(2));
+            sleep(2000);
+            cout << "[---GLOWNA SIEDZIBA STRAZNIKOW ZARU---]" << endl;
             cout << "Dowodca Strazakow Samuel: ";
             print_letter_by_letter("Witaj swiezaku, jestem Sam i dowodze tymi oszolomami.");
-            this_thread::sleep_for(chrono::seconds(3));
+            sleep(3000);
             print_letter_by_letter("To jest Franek, poznajcie sie, wdrozy Cie w nasze szeregi i oprowadzi po jednostce.");
-            cout << "Strazak Franciszek: ";
+            cout << "Starszy Strazak Franciszek: ";
             print_letter_by_letter("Czesc mlody, na poczatek, trzymaj podstawowy przedmiot kazdego strazaka");
-            this_thread::sleep_for(chrono::milliseconds(500));
+            sleep(500);
             player.extinguisher_lvl++;
             cout << "[+] DODANO PRZEDMIOT: ZWYKLA GASNICA" << endl;
-            this_thread::sleep_for(chrono::milliseconds(500));
-            cout << "Strazak Franciszek: ";
+            sleep(500);
+            cout << "Starszy Strazak Franciszek: ";
             print_letter_by_letter("W tych czasach kazdy z nas nosi pod reka swoja gasnice. "
                                    "To narzedzie ktore najlepiej sprawdza sie w ratowaniu cywili, ale od biedy moze tez "
                                    "sluzyc w walce ze smokami.");
+            sleep(1000);
+            cout << "Starszy Strazak Franciszek: ";
+            print_letter_by_letter("Pozwol, ze oprowadze Cie teraz po naszej centrali...");
+            cout << "[TRACHHH!]";
+            sleep(2000);
+            cout << "Dowodca Strazakow Samuel: ";
+            print_letter_by_letter("SLYSZELISCIE TO!? TO NIKCZEMNIUCH! Myslalem ze ostatnim razem udalo nam sie go pokonac, "
+                                   "ale wyglada na to za powrocil! Franek, bierz nowego i zajmijcie sie nim. Ja zbiore chlopakow i "
+                                   "zaraz do was dolaczymy!");
+            cout << "Starszy Strazak Franciszek: ";
+            print_letter_by_letter("Za mna mlody, wydaje mi sie, ze wyladowal na dachu. Pamietaj o gasnicy! ");
+            sleep(3000);
+            cout << "[---GLOWNA SIEDZIBA STRAZNIKOW ZARU - DACH---]" << endl;
+            cout << "Starszy Strazak Franciszek: ";
+            print_letter_by_letter("Acha! Jest tutaj! Do dziela mlody!");
+            fight(player,Nikczemniuch);
 
 
 
@@ -156,7 +181,7 @@ int main() {
 
         switch (choice) {
             case 1:
-                if (fight(player,dragon) < 0){
+                if (fight(player,Wladca_Zaru) < 0){
                     gameOver = true;
                 }
                 break;
