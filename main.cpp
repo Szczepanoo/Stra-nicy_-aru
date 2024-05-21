@@ -41,9 +41,9 @@ public:
         if (name == "NIKCZEMNIUCH") {
             cout << "Sila: brak danych" << endl;
         } else {
-            cout << "Sila:" << damage << endl;
+            cout << "Sila: " << damage << endl;
         }
-        cout << "Zdrowie:" << health << endl;
+        cout << "Zdrowie: " << health << endl << endl;
     }
 };
 
@@ -57,7 +57,7 @@ public:
     int waterBomb_lvl;
     int waterBomb_amt;
 
-    Firefighter() : health(100), water(100), experience(0), extinguisher_lvl(0), waterBomb_lvl(0), waterBomb_amt(0) {}
+    Firefighter() : health(120), water(100), experience(0), extinguisher_lvl(0), waterBomb_lvl(0), waterBomb_amt(0) {}
 
     void useExtinguisher() {
         if (water > 0) {
@@ -80,6 +80,8 @@ void displayStatus(Firefighter &ff, Dragon &dragon) {
 }
 
 int fight(Firefighter &player, Dragon &dragon) {
+    int max_player_health = player.health;
+    int max_dragon_health = dragon.health;
     dragon.print_info();
     while (player.health >= 0 && dragon.health > 0) {
         int base_player_damage;
@@ -130,14 +132,20 @@ int fight(Firefighter &player, Dragon &dragon) {
         player.health -= real_dragon_damage;
         dragon.health -= real_player_damage;
         dragon.attack(real_dragon_damage);
-        cout << "Zadajesz "<< real_player_damage <<" obrazen smokowi!" << endl;
+        cout << "Zadajesz "<< real_player_damage <<" obrazen smokowi!" << endl << endl;
+        cout << "Poziom twojego zdrowia: " << player.health << "/" << max_player_health << endl;
+        cout << "Poziom zdrowia przeciwnika: " << dragon.health << "/" << max_dragon_health << endl;
         if (player.health <= 0) {
             cout << "Porazka" << endl;
             player.experience += 1;
+            cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
+            cin.get();
             return -1;
         } else if (dragon.health <= 0) {
-            cout << "Zwyciestwo! Zdobywasz: "<< dragon.health << "xp" << endl;
-            player.experience+=dragon.health;
+            cout << "Zwyciestwo! Zdobywasz: "<< max_dragon_health << "xp." << endl;
+            player.experience+= max_dragon_health;
+            cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
+            cin.get();
             return 1;
         }
     }
@@ -146,7 +154,7 @@ int fight(Firefighter &player, Dragon &dragon) {
 void print_letter_by_letter(string string){
     for (int i = 0; i < string.length(); i ++){
         cout << string[i] << flush;
-//        sleep(50);
+        sleep(50);
     }
     cout << endl;
 }
@@ -183,9 +191,8 @@ int main() {
     bool gameOver = false;
     while (!gameOver) {
         Dragon Wladca_Zaru("Wladca Zaru", 10000, 250);
-        Dragon Nikczemniuch("Nikczemniuch",60,15);
+        Dragon Nikczemniuch("NIKCZEMNIUCH",60,15);
         if (player.experience == 0){
-            fight(player,Nikczemniuch);
             system("cls");
             print_letter_by_letter("Witaj w miescie Pyroklas!");
             sleep(500);
@@ -224,8 +231,7 @@ int main() {
             cout << "[---GLOWNA SIEDZIBA STRAZNIKOW ZARU - DACH---]" << endl;
             cout << "Starszy Strazak Franciszek: ";
             print_letter_by_letter("Acha! Jest tutaj! Do dziela mlody!");
-//            fight(player,Nikczemniuch);
-
+            fight(player,Nikczemniuch);
 
 
         }
