@@ -4,6 +4,7 @@
 #include <ctime>
 #include <thread>
 #include <chrono>
+#include <random>
 
 using namespace std;
 
@@ -11,6 +12,17 @@ void sleep(int time_ms){
     this_thread::sleep_for(chrono::milliseconds(time_ms));
 }
 
+int getChoice(){
+    string choiceStr;
+    int choice;
+    cin >> choiceStr;
+    try {
+        choice = stoi(choiceStr);
+    } catch (invalid_argument){
+        choice = -999;
+    }
+    return choice;
+}
 
 // Klasa reprezentująca smoka
 class Dragon {
@@ -24,6 +36,15 @@ public:
     void attack() {
         cout << name << " atakuje zadajac " << damage << " obrazen!" << endl;
     }
+    void print_info() {
+        cout << "[" << name << "]" << endl;
+        if (name == "NIKCZEMNIUCH") {
+            cout << "Sila: brak danych" << endl;
+        } else {
+            cout << "Sila:" << damage << endl;
+        }
+        cout << "Zdrowie:" << health << endl;
+    }
 };
 
 // Klasa reprezentująca gracza-strażaka
@@ -32,11 +53,11 @@ public:
     int health;
     int water;
     int experience;
-    int damage;
     int extinguisher_lvl;
     int waterBomb_lvl;
+    int waterBomb_amt;
 
-    Firefighter() : health(100), water(100), experience(0), damage(10), extinguisher_lvl(0), waterBomb_lvl(0) {}
+    Firefighter() : health(100), water(100), experience(0), extinguisher_lvl(0), waterBomb_lvl(0), waterBomb_amt(0) {}
 
     void useExtinguisher() {
         if (water > 0) {
@@ -59,17 +80,57 @@ void displayStatus(Firefighter &ff, Dragon &dragon) {
 }
 
 int fight(Firefighter &player, Dragon &dragon) {
-
+    dragon.print_info();
     while (player.health >= 0 && dragon.health > 0) {
-        player.health -= dragon.damage;
-        dragon.health -= player.damage;
+        int p_damage;
+        bool choice_accepted = false;
+        while (!choice_accepted) {
+            cout << "Wybierz atak:" << endl;
+            if (player.extinguisher_lvl > 0) {
+                cout << "1. Gasnica";
+            }
+
+            if (player.waterBomb_lvl > 0 && player.waterBomb_amt > 0) {
+                cout << "2. Bomba wodna";
+            }
+
+            int choice = getChoice();
+            switch (choice) {
+                case 1:
+                    p_damage = player.extinguisher_lvl * 10;
+                    break;
+                case 2:
+                    p_damage = -10;
+                    break;
+                case 3:
+                    p_damage = -10;
+                    break;
+                default:
+                    cout << "Nieprawidlowy wybor.";
+                    break;
+            }
+        }
+
+        // Utwórz generator liczb losowych z losowym ziarniem
+        random_device rd;
+        mt19937 gen(rd());
+        uniform_int_distribution<> dis(static_cast<int>(p_damage * 0.75), static_cast<int>(p_damage * 1.25));
+        int real_player_damage = dis(gen);
+
+        uniform_int_distribution<> dis2(static_cast<int>(dragon.damage * 0.75), static_cast<int>(dragon.damage * 1.25));
+        int real_dragon_damage = dis2(gen);
+
+        player.health -= real_dragon_damage;
+        dragon.health -= real_player_damage;
         dragon.attack();
         cout << "Zadajesz 10 obrazen smokowi!" << endl;
         if (player.health <= 0) {
-            cout << "Zostales pokonany przez smoka. Gra skonczona." << endl;
+            cout << "Porazka" << endl;
+            player.experience += 1;
             return -1;
         } else if (dragon.health <= 0) {
-            cout << "Pokonales smoka! Wygrałes gre!" << endl;
+            cout << "Zwyciestwo!" << endl;
+            player.experience+=dragon.health;
             return 1;
         }
     }
@@ -78,29 +139,20 @@ int fight(Firefighter &player, Dragon &dragon) {
 void print_letter_by_letter(string string){
     for (int i = 0; i < string.length(); i ++){
         cout << string[i] << flush;
-        sleep(50);
+//        sleep(50);
     }
     cout << endl;
 }
 
 
 int main() {
-    srand(time(0));
     Firefighter player;
-
 
     bool showMenu = true;
     cout << "Straznicy Zaru: Ognisty Konflikt" << endl;
     while (showMenu) {
         cout << "1. Nowa gra\n2. Wczytaj zapis\n0. Wyjscie z gry\n";
-        string choiceStr;
-        cin >> choiceStr;
-        int choice;
-        try {
-            choice = stoi(choiceStr);
-        } catch (invalid_argument){
-            choice = -999;
-        }
+        int choice = getChoice();
 
         switch (choice) {
             case 1:
@@ -152,7 +204,7 @@ int main() {
             sleep(1000);
             cout << "Starszy Strazak Franciszek: ";
             print_letter_by_letter("Pozwol, ze oprowadze Cie teraz po naszej centrali...");
-            cout << "[TRACHHH!]";
+            cout << "[TRACHHH!]" << endl;
             sleep(2000);
             cout << "Dowodca Strazakow Samuel: ";
             print_letter_by_letter("SLYSZELISCIE TO!? TO NIKCZEMNIUCH! Myslalem ze ostatnim razem udalo nam sie go pokonac, "
@@ -170,14 +222,8 @@ int main() {
 
         }
         cout << "\nWybierz akcje:\n1. Walka ze smokiem\n2. Gaszenie pozaru\n3. Ratowanie cywila\n0. Wyjscie z gry\n";
-        string choiceStr;
-        cin >> choiceStr;
-        int choice;
-        try {
-            choice = stoi(choiceStr);
-        } catch (invalid_argument){
-            choice = -999;
-        }
+
+        int choice = getChoice();
 
         switch (choice) {
             case 1:
