@@ -50,14 +50,18 @@ public:
 // Klasa reprezentująca gracza-strażaka
 class Firefighter {
 public:
+    string name;
     int health;
+    int max_health;
     int water;
     int experience;
     int extinguisher_lvl;
     int waterBomb_lvl;
     int waterBomb_amt;
+    int medkits;
 
-    Firefighter() : health(120), water(100), experience(0), extinguisher_lvl(0), waterBomb_lvl(0), waterBomb_amt(0) {}
+
+    Firefighter() : health(120), max_health(120), water(100), experience(0), extinguisher_lvl(0), waterBomb_lvl(0), waterBomb_amt(0), medkits(0){}
 
     void useExtinguisher() {
         if (water > 0) {
@@ -80,7 +84,6 @@ void displayStatus(Firefighter &ff, Dragon &dragon) {
 }
 
 int fight(Firefighter &player, Dragon &dragon) {
-    int max_player_health = player.health;
     int max_dragon_health = dragon.health;
     dragon.print_info();
     while (player.health >= 0 && dragon.health > 0) {
@@ -133,7 +136,7 @@ int fight(Firefighter &player, Dragon &dragon) {
         dragon.health -= real_player_damage;
         dragon.attack(real_dragon_damage);
         cout << "Zadajesz "<< real_player_damage <<" obrazen smokowi!" << endl << endl;
-        cout << "Poziom twojego zdrowia: " << player.health << "/" << max_player_health << endl;
+        cout << "Poziom twojego zdrowia: " << player.health << "/" << player.max_health << endl;
         cout << "Poziom zdrowia przeciwnika: " << dragon.health << "/" << max_dragon_health << endl;
         if (player.health <= 0) {
             cout << "Porazka" << endl;
@@ -154,15 +157,45 @@ int fight(Firefighter &player, Dragon &dragon) {
 void print_letter_by_letter(string string){
     for (int i = 0; i < string.length(); i ++){
         cout << string[i] << flush;
-        sleep(50);
+//        sleep(50);
     }
     cout << endl;
 }
 
+void showEquiment(Firefighter &player){
+    cout << endl << "[" << player.name << "]" << endl;
+    cout << "Stan zdrowia: "<< player.health << "/" << player.max_health << endl;
+    switch (player.extinguisher_lvl) {
+        case 1:
+            cout << "Gasnica: ZWYKLA GASNICA" << endl;
+            break;
+        case 2:
+            cout << "Gasnica: NIEPOSPOLITA GASNICA" << endl;
+            break;
+        case 3:
+            cout << "Gasnica: GASNICA DOWODCY" << endl;
+            break;
+        case 4:
+            cout << "Gasnica: LEGENDARNA GASNICA" << endl;
+            break;
+        case 5:
+            cout << "Gasnica: GASNICA ZE SMOCZEJ LUSKI" << endl;
+            break;
+        default:
+            cout << "Gasnica: BRAK" << endl;
+            break;
+    }
+    cout << "Bomby wodne (szt): " << player.waterBomb_amt << endl;
+    cout << "Apteczki (szt):" << player.medkits << endl;
+}
 
 int main() {
+    Dragon Nikczemniuch("NIKCZEMNIUCH",60,15);
+    Dragon Burzogniew("BURZOGNIEW",1000,70);
+    Dragon Pyros("PYROS",5000,90);
+    Dragon Zguba_Miast("ZGUBA MIAST",7000,100);
+    Dragon Wladca_Zaru("WLADCA ZARU", 10000, 250);
     Firefighter player;
-
     bool showMenu = true;
     cout << "Straznicy Zaru: Ognisty Konflikt" << endl;
     while (showMenu) {
@@ -187,11 +220,8 @@ int main() {
 
     }
 
-
     bool gameOver = false;
     while (!gameOver) {
-        Dragon Wladca_Zaru("Wladca Zaru", 10000, 250);
-        Dragon Nikczemniuch("NIKCZEMNIUCH",60,15);
         if (player.experience == 0){
             system("cls");
             print_letter_by_letter("Witaj w miescie Pyroklas!");
@@ -209,7 +239,7 @@ int main() {
             cout << "Starszy Strazak Franciszek: ";
             print_letter_by_letter("Czesc mlody, na poczatek, trzymaj podstawowy przedmiot kazdego strazaka");
             sleep(500);
-            player.extinguisher_lvl++;
+            player.extinguisher_lvl+=5;
             cout << "[+] DODANO PRZEDMIOT: ZWYKLA GASNICA" << endl;
             sleep(500);
             cout << "Starszy Strazak Franciszek: ";
@@ -232,6 +262,17 @@ int main() {
             cout << "Starszy Strazak Franciszek: ";
             print_letter_by_letter("Acha! Jest tutaj! Do dziela mlody!");
             fight(player,Nikczemniuch);
+
+
+
+
+
+
+
+
+
+
+            showEquiment(player);
 
 
         }
