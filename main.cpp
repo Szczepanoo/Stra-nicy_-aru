@@ -28,8 +28,10 @@ public:
     int water;
     int experience;
     int damage;
+    int extinguisher_lvl;
+    int waterBomb_lvl;
 
-    Firefighter() : health(100), water(100), experience(0), damage(10) {}
+    Firefighter() : health(100), water(100), experience(0), damage(10), extinguisher_lvl(0), waterBomb_lvl(0) {}
 
     void useExtinguisher() {
         if (water > 0) {
@@ -115,16 +117,31 @@ int main() {
     bool gameOver = false;
     while (!gameOver) {
         Dragon dragon("Wladca Zaru", 100, 20);
-        displayStatus(player, dragon);
         if (player.experience == 0){
             system("cls");
             print_letter_by_letter("Witaj w miescie Pyroklas!");
             this_thread::sleep_for(chrono::milliseconds(500));
-            print_letter_by_letter("Codzienne zycie splata sie tu z cieniem niebezpieczenstwa unoszacego sie w powietrzu. W miasteczku, gdzie smoki nie sa legenda, ale rzeczywistoscia. Ostatnio jednak atmosfera napiecia narasta, a grozba plonacych pozarow staje sie coraz bardziej palaca.");
+            print_letter_by_letter("Codzienne zycie splata sie tu z cieniem niebezpieczenstwa unoszacego sie w powietrzu. "
+                                   "W miasteczku, gdzie smoki nie sa legenda, ale rzeczywistoscia. "
+                                   "Ostatnio jednak atmosfera napiecia narasta, a grozba zlowrogich pozarow staje sie coraz bardziej realna. "
+                                   "Jako mlody adept pozarnictwa wstepujesz w szeregi lokalnej jednostki strazy pozarnej, aby wesprzec ich w dzialaniach.");
             this_thread::sleep_for(chrono::seconds(2));
-            cout << "Dowodca Strazakow Samuel: Witaj swiezaku, jestem Sam i dowodze tymi szajbusami." << endl;
+            cout << "Dowodca Strazakow Samuel: ";
+            print_letter_by_letter("Witaj swiezaku, jestem Sam i dowodze tymi oszolomami.");
             this_thread::sleep_for(chrono::seconds(3));
-            cout << "To jest Franek, zajmie sie twoim wdrozeniem";
+            print_letter_by_letter("To jest Franek, poznajcie sie, wdrozy Cie w nasze szeregi i oprowadzi po jednostce.");
+            cout << "Strazak Franciszek: ";
+            print_letter_by_letter("Czesc mlody, na poczatek, trzymaj podstawowy przedmiot kazdego strazaka");
+            this_thread::sleep_for(chrono::milliseconds(500));
+            player.extinguisher_lvl++;
+            cout << "[+] DODANO PRZEDMIOT: ZWYKLA GASNICA" << endl;
+            this_thread::sleep_for(chrono::milliseconds(500));
+            cout << "Strazak Franciszek: ";
+            print_letter_by_letter("W tych czasach kazdy z nas nosi pod reka swoja gasnice. "
+                                   "To narzedzie ktore najlepiej sprawdza sie w ratowaniu cywili, ale od biedy moze tez "
+                                   "sluzyc w walce ze smokami.");
+
+
 
         }
         cout << "\nWybierz akcje:\n1. Walka ze smokiem\n2. Gaszenie pozaru\n3. Ratowanie cywila\n0. Wyjscie z gry\n";
