@@ -33,8 +33,8 @@ public:
 
     Dragon(string n, int h, int d) : name(n), health(h), damage(d) {}
 
-    void attack() {
-        cout << name << " atakuje zadajac " << damage << " obrazen!" << endl;
+    void attack(int real_damage) {
+        cout << name << " atakuje zadajac " << real_damage << " obrazen!" << endl;
     }
     void print_info() {
         cout << "[" << name << "]" << endl;
@@ -82,39 +82,46 @@ void displayStatus(Firefighter &ff, Dragon &dragon) {
 int fight(Firefighter &player, Dragon &dragon) {
     dragon.print_info();
     while (player.health >= 0 && dragon.health > 0) {
-        int p_damage;
+        int base_player_damage;
         bool choice_accepted = false;
         while (!choice_accepted) {
             cout << "Wybierz atak:" << endl;
             if (player.extinguisher_lvl > 0) {
-                cout << "1. Gasnica";
+                cout << "1. Gasnica" << endl;
             }
 
             if (player.waterBomb_lvl > 0 && player.waterBomb_amt > 0) {
-                cout << "2. Bomba wodna";
+                cout << "2. Bomba wodna" << endl;
             }
 
             int choice = getChoice();
             switch (choice) {
                 case 1:
-                    p_damage = player.extinguisher_lvl * 10;
+                    base_player_damage = player.extinguisher_lvl * 10;
+                    choice_accepted = true;
                     break;
                 case 2:
-                    p_damage = -10;
+                    if (player.waterBomb_lvl > 0 && player.waterBomb_amt > 0){
+                        base_player_damage = -10;
+                        choice_accepted = true;
+                    } else {
+                        cout << "Nieprawidlowy wybor." << endl;
+                    }
                     break;
                 case 3:
-                    p_damage = -10;
+                    base_player_damage = -10;
+                    choice_accepted = true;
                     break;
                 default:
-                    cout << "Nieprawidlowy wybor.";
+                    cout << "Nieprawidlowy wybor." << endl;
                     break;
             }
         }
 
-        // Utwórz generator liczb losowych z losowym ziarniem
+        //Generator liczb losowych z losowym ziarniem
         random_device rd;
         mt19937 gen(rd());
-        uniform_int_distribution<> dis(static_cast<int>(p_damage * 0.75), static_cast<int>(p_damage * 1.25));
+        uniform_int_distribution<> dis(static_cast<int>(base_player_damage * 0.75), static_cast<int>(base_player_damage * 1.25));
         int real_player_damage = dis(gen);
 
         uniform_int_distribution<> dis2(static_cast<int>(dragon.damage * 0.75), static_cast<int>(dragon.damage * 1.25));
@@ -122,14 +129,14 @@ int fight(Firefighter &player, Dragon &dragon) {
 
         player.health -= real_dragon_damage;
         dragon.health -= real_player_damage;
-        dragon.attack();
-        cout << "Zadajesz 10 obrazen smokowi!" << endl;
+        dragon.attack(real_dragon_damage);
+        cout << "Zadajesz "<< real_player_damage <<" obrazen smokowi!" << endl;
         if (player.health <= 0) {
             cout << "Porazka" << endl;
             player.experience += 1;
             return -1;
         } else if (dragon.health <= 0) {
-            cout << "Zwyciestwo!" << endl;
+            cout << "Zwyciestwo! Zdobywasz: "<< dragon.health << "xp" << endl;
             player.experience+=dragon.health;
             return 1;
         }
@@ -178,6 +185,7 @@ int main() {
         Dragon Wladca_Zaru("Wladca Zaru", 10000, 250);
         Dragon Nikczemniuch("Nikczemniuch",60,15);
         if (player.experience == 0){
+            fight(player,Nikczemniuch);
             system("cls");
             print_letter_by_letter("Witaj w miescie Pyroklas!");
             sleep(500);
@@ -216,7 +224,7 @@ int main() {
             cout << "[---GLOWNA SIEDZIBA STRAZNIKOW ZARU - DACH---]" << endl;
             cout << "Starszy Strazak Franciszek: ";
             print_letter_by_letter("Acha! Jest tutaj! Do dziela mlody!");
-            fight(player,Nikczemniuch);
+//            fight(player,Nikczemniuch);
 
 
 
