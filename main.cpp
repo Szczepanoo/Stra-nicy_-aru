@@ -2,6 +2,8 @@
 #include <string>
 #include <cstdlib>
 #include <ctime>
+#include <thread>
+#include <chrono>
 
 using namespace std;
 
@@ -25,8 +27,9 @@ public:
     int health;
     int water;
     int experience;
+    int damage;
 
-    Firefighter() : health(100), water(100), experience(0) {}
+    Firefighter() : health(100), water(100), experience(0), damage(10) {}
 
     void useExtinguisher() {
         if (water > 0) {
@@ -48,10 +51,10 @@ void displayStatus(Firefighter &ff, Dragon &dragon) {
     cout << "Status Smoka: Zdrowie = " << dragon.health << endl;
 }
 
-int fight(Firefighter &player, Dragon &dragon){
+int fight(Firefighter &player, Dragon &dragon) {
     while (player.health >= 0 && dragon.health > 0) {
         player.health -= dragon.damage;
-        dragon.health -= 10;
+        dragon.health -= player.damage;
         dragon.attack();
         cout << "Zadajesz 10 obrazen smokowi!" << endl;
         if (player.health <= 0) {
@@ -64,15 +67,23 @@ int fight(Firefighter &player, Dragon &dragon){
     }
 }
 
+void print_letter_by_letter(string string){
+    for (int i = 0; i < string.length(); i ++){
+        cout << string[i] << flush;
+        this_thread::sleep_for(chrono::milliseconds(50));
+    }
+    cout << endl;
+}
+
 int main() {
-    srand(std::time(0));
+    srand(time(0));
     Firefighter player;
 
 
     bool showMenu = true;
     cout << "Straznicy Zaru: Ognisty Konflikt" << endl;
     while (showMenu) {
-        cout << "1. Nowa gra\n2. Wczytaj zapis\n3. Wyjscie z gry\n";
+        cout << "1. Nowa gra\n2. Wczytaj zapis\n0. Wyjscie z gry\n";
         string choiceStr;
         cin >> choiceStr;
         int choice;
@@ -90,10 +101,9 @@ int main() {
             case 2:
                 cout << "Coming soon..." << endl;
                 break;
-            case 3:
+            case 0:
                 cout << "Do zobaczenia!" << endl;
                 return 0;
-                break;
             default:
                 cout << "Nieprawidlowy wybor." << endl;
                 break;
@@ -106,8 +116,18 @@ int main() {
     while (!gameOver) {
         Dragon dragon("Wladca Zaru", 100, 20);
         displayStatus(player, dragon);
+        if (player.experience == 0){
+            system("cls");
+            print_letter_by_letter("Witaj w miescie Pyroklas!");
+            this_thread::sleep_for(chrono::milliseconds(500));
+            print_letter_by_letter("Codzienne zycie splata sie tu z cieniem niebezpieczenstwa unoszacego sie w powietrzu. W miasteczku, gdzie smoki nie sa legenda, ale rzeczywistoscia. Ostatnio jednak atmosfera napiecia narasta, a grozba plonacych pozarow staje sie coraz bardziej palaca.");
+            this_thread::sleep_for(chrono::seconds(2));
+            cout << "Dowodca Strazakow Samuel: Witaj swiezaku, jestem Sam i dowodze tymi szajbusami." << endl;
+            this_thread::sleep_for(chrono::seconds(3));
+            cout << "To jest Franek, zajmie sie twoim wdrozeniem";
 
-        cout << "\nWybierz akcje:\n1. Walka ze smokiem\n2. Gaszenie pozaru\n3. Ratowanie cywila\n4. Wyjscie z gry\n";
+        }
+        cout << "\nWybierz akcje:\n1. Walka ze smokiem\n2. Gaszenie pozaru\n3. Ratowanie cywila\n0. Wyjscie z gry\n";
         string choiceStr;
         cin >> choiceStr;
         int choice;
@@ -129,7 +149,7 @@ int main() {
             case 3:
                 player.rescueCivilian();
                 break;
-            case 4:
+            case 0:
                 gameOver = true;
                 break;
             default:
