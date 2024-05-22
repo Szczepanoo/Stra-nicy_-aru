@@ -33,9 +33,6 @@ public:
 
     Dragon(string n, int h, int d) : name(n), health(h), damage(d) {}
 
-    void attack(int real_damage) {
-        cout << name << " atakuje zadajac " << real_damage << " obrazen!" << endl << endl;
-    }
     void print_info() {
         cout << "[" << name << "]" << endl;
         if (name == "NIKCZEMNIUCH") {
@@ -152,12 +149,22 @@ int fight(Firefighter &player, Dragon &dragon) {
             player.medkits--;
             cout << "Pozostalo " << player.medkits << "szt." << endl;
         } else {
-            cout << "Zadajesz " << real_player_damage << " obrazen smokowi!" << endl;
             dragon.health -= real_player_damage;
+            cout << "Zadajesz " << real_player_damage << " obrazen smokowi!" << endl;
         }
 
-        dragon.attack(real_dragon_damage);
+
         player.health -= real_dragon_damage;
+        if (player.health <= 0 && dragon.name == "NIKCZEMNIUCH"){
+            cout << "Starszy Strazak Franciszek zadaje 54 obrazen smokowi!" << endl;
+            cout << "Poziom zdrowia przeciwnika: " << dragon.health - 54 << "/" << max_dragon_health  << endl;
+            cout << "Zwyciestwo! Zdobywasz: 10xp" << endl;
+            cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
+            cin.get();
+            return -1;
+
+        }
+        cout << dragon.name << " atakuje zadajac " << real_dragon_damage << " obrazen!" << endl << endl;
         cout << "Poziom twojego zdrowia: " << player.health << "/" << player.max_health << endl;
         cout << "Poziom zdrowia przeciwnika: " << dragon.health << "/" << max_dragon_health << endl;
         if (player.health <= 0) {
@@ -179,7 +186,7 @@ int fight(Firefighter &player, Dragon &dragon) {
 void print_letter_by_letter(string string){
     for (int i = 0; i < string.length(); i ++){
         cout << string[i] << flush;
-//        sleep(50);
+        sleep(50);
     }
     cout << endl;
 }
@@ -212,7 +219,7 @@ void showEquiment(Firefighter &player){
 }
 
 int main() {
-    Dragon Nikczemniuch("NIKCZEMNIUCH",60,15);
+    Dragon Nikczemniuch("NIKCZEMNIUCH",60,35);
     Dragon Burzogniew("BURZOGNIEW",1000,70);
     Dragon Pyros("PYROS",5000,90);
     Dragon Zguba_Miast("ZGUBA MIAST",7000,100);
@@ -262,7 +269,6 @@ int main() {
             print_letter_by_letter("Czesc mlody, na poczatek, trzymaj podstawowy przedmiot kazdego strazaka");
             sleep(500);
             player.extinguisher_lvl++;
-            player.medkits += 5;
             cout << "[+] DODANO PRZEDMIOT: ZWYKLA GASNICA" << endl;
             sleep(500);
             cout << "Starszy Strazak Franciszek: ";
@@ -301,7 +307,7 @@ int main() {
             // cout << player.name;
             cout << "Dowodca Strazakow Samuel: ";
             print_letter_by_letter("Milo Cie poznac " + player.name + ". Franek dokonczyl twoje szkolenie? "
-                                                                      "Jeden rozwiazany, ale nie mozemy teraz spoczac na laurach. "
+                                                                      "Jeden problem rozwiazany, ale nie mozemy teraz spoczac na laurach. "
                                                                       "Bierzmy sie do roboty.");
             sleep(1000);
             cout << "Starszy Strazak Franciszek: ";
@@ -327,25 +333,27 @@ int main() {
             }
             sleep(1000);
             cout << "Starszy Strazak Franciszek: ";
-            print_letter_by_letter("Przejdzmy teraz do omowienia naszych codziennych aktywnosci. ");
-
-
-
-
-
-
-
-            showEquiment(player);
+            print_letter_by_letter("Przejdzmy teraz do omowienia naszych codziennych aktywnosci. "
+                                   "Standardowo wykonujemy 3 rodzaje misji: ratowanie cywili, gaszenie pozarow i polowanie na smoki. "
+                                   "Kazda z misji polega na czyms innym i jest niemniej wazna od pozostalych. "
+                                   "Misje ratunkowe zwiekszaja poziom bezpieczenstwa w miescie oraz nasz poziom respektu wsrod ludzi. "
+                                   "Gaszenie pozarow odblokowuje dostep do zniszczonych czesci miasta, "
+                                   "w ktorych istnieje szansa na odnalezienie lepszej broni lub nowego ekwipunku. "
+                                   "Polowanie na smoki to najbardziej wymagajaca misja. "
+                                   "Z naszych ustalen wynika, ze w miescie grasuja 4 smoki, no teraz to juz 3 i Wladca Zaru - prawdopodobnie"
+                                   "rowniez smok - najpotezniejszy i najsilniejszy ze wszystkich. "
+                                   "Mysle, ze polowanie na smoki to aktualnie zly wybor, ale decyzja nalezy do Ciebie. "
+                                   "Czym chesz sie teraz zajac?");
 
 
         }
-        cout << "\nWybierz akcje:\n1. Walka ze smokiem\n2. Gaszenie pozaru\n3. Ratowanie cywila\n0. Wyjscie z gry\n";
+        cout << "\n[Wybierz akcje]\n1. Misja ratunkowa\n2. Gaszenie pozaru\n3. Polowanie na smoki\n4. Zapisz gre\n5. Wyswietl ekwipunek\n0. Wyjscie z gry\n";
 
         int choice = getChoice();
 
         switch (choice) {
             case 1:
-                if (fight(player,Wladca_Zaru) < 0){
+                if (fight(player,Burzogniew) < 0){
                     gameOver = true;
                 }
                 break;
