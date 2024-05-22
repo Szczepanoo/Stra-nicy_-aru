@@ -5,24 +5,10 @@
 #include <thread>
 #include <chrono>
 #include <random>
+#include <array>
 
 using namespace std;
 
-void sleep(int time_ms){
-    this_thread::sleep_for(chrono::milliseconds(time_ms));
-}
-
-int getChoice(){
-    string choiceStr;
-    int choice;
-    cin >> choiceStr;
-    try {
-        choice = stoi(choiceStr);
-    } catch (invalid_argument){
-        choice = -999;
-    }
-    return choice;
-}
 
 // Klasa reprezentująca smoka
 class Dragon {
@@ -50,7 +36,6 @@ public:
     string name;
     int health;
     int max_health;
-    int water;
     int experience;
     int extinguisher_lvl;
     int waterBomb_lvl;
@@ -58,26 +43,44 @@ public:
     int medkits;
 
 
-    Firefighter() : name(""), health(120), max_health(120), water(100), experience(0), extinguisher_lvl(0), waterBomb_lvl(0), waterBomb_amt(0), medkits(0){}
+    Firefighter() : name(""), health(120), max_health(120), experience(0), extinguisher_lvl(0), waterBomb_lvl(0), waterBomb_amt(0), medkits(0){}
 
-    void useExtinguisher() {
-        if (water > 0) {
-            cout << "Uzywasz wody do gaszenia pozaru!" << endl;
-            water -= 10;
+};
+
+void sleep(int time_ms){
+    this_thread::sleep_for(chrono::milliseconds(time_ms));
+}
+
+int getChoice(){
+    string choiceStr;
+    int choice;
+    cin >> choiceStr;
+    try {
+        choice = stoi(choiceStr);
+    } catch (invalid_argument){
+        choice = -999;
+    }
+    return choice;
+}
+
+string encryptCaesar(const string& text, int shift) {
+    string result = "";
+
+    for (char c : text) {
+        if (isalpha(c)) {
+            char offset = isupper(c) ? 'A' : 'a';
+            result += (c - offset + shift) % 26 + offset;
         } else {
-            cout << "Brak wody!" << endl;
+            result += c;
         }
     }
 
-    void rescueCivilian() {
-        cout << "Ratujesz cywila!" << endl;
-        experience += 10;
-    }
-};
+    return result;
+}
 
-void displayStatus(Firefighter &ff, Dragon &dragon) {
-    cout << "Status Gracza: Zdrowie = " << ff.health << ", Woda = " << ff.water << ", Doswiadczenie = " << ff.experience << endl;
-    cout << "Status Smoka: Zdrowie = " << dragon.health << endl;
+// Funkcja deszyfrująca szyfr Cezara
+string decryptCaesar(const string& text, int shift) {
+    return encryptCaesar(text, 26 - (shift % 26));
 }
 
 int fight(Firefighter &player, Dragon &dragon) {
@@ -196,6 +199,7 @@ void print_letter_by_letter(string string){
 
 void showEquiment(Firefighter &player){
     cout << endl << "[" << player.name << "]" << endl;
+    cout << "Doswiadczenie: " << player.experience << endl;
     cout << "Stan zdrowia: "<< player.health << "/" << player.max_health << endl;
     switch (player.extinguisher_lvl) {
         case 1:
@@ -218,10 +222,90 @@ void showEquiment(Firefighter &player){
             break;
     }
     cout << "Bomby wodne (szt): " << player.waterBomb_amt << endl;
-    cout << "Apteczki (szt):" << player.medkits << endl;
+    cout << "Apteczki (szt): " << player.medkits << endl;
 }
 
-void RescueCivilianMission(){
+void RCMission1(Firefighter &player){
+    random_device rd;
+    mt19937 gen(rd());
+
+    uniform_int_distribution<> dis(1, 3);
+    uniform_int_distribution<> dis2(1,25);
+
+    int string_index = dis(gen);
+    int key = dis2(gen);
+
+    array<string, 3> strings = {
+            "W mrocznych zakamarkach gdzie cienie tancza w rytm ukrytych prawd poszukaj kryjowki skrytej pod kamieniem ktory nosi na sobie slady czasu.",
+            "Pod plomieniami dnia na skraju zapomnianej rzeki odkryj wejscie do podziemnego labiryntu ktorego wejscie strzeze zardzewialy klucz.",
+            "W miejscu gdzie kamienie szepcza opowiesci o dawnych czasach zanurz sie w mrocznej studni ktora ukrywa droge do zagubionego swiata podziemnego."
+    };
+
+    string encrypted_string = encryptCaesar(strings[string_index],key);
+
+    cout << "Starszy Strazak Franciszek: ";
+    print_letter_by_letter("Brygada jest juz w drodze na ratunek cywili w zawalonym szpitale. "
+                           "Ze wzgledu na zniszczenia tradycyjne wejscie do budynku odpada. "
+                           "Udalo nam sie pozyskac plany kanalow, tylko problem w tym ze sa zaszyfrowane. "
+                           "Musisz okreslic jaki jest klucz tego szyfru. Wstepnie ustalilismy ze jest to liczba miedzy 1 a 25. "
+                           "Fragmenty planu wygladaja nastepujaco: ");
+    cout << endl << encrypted_string << endl;
+
+    bool mission_completed = false;
+    while (!mission_completed) {
+        cout << "Wprowadz klucz: ";
+        int user_key = getChoice();
+        if (user_key > 25 || user_key < 1) {
+            cout << "Nieprawidlowy klucz." << endl;
+        } else {
+            cout << "Fragment po zastosowaniu podanego klucza: " << endl;
+            cout << decryptCaesar(encrypted_string, user_key) << endl;
+
+            cout << "[Wybierz akcje]" << endl;
+            cout << "1. Zatwierdz" << endl;
+            cout << "2. Sprobuj ponownie" << endl;
+            int accept_result = getChoice();
+            if (accept_result == 1){
+                if (user_key == key){
+                    mission_completed = true;
+                    cout << "Starszy Strazak Franek: ";
+                    print_letter_by_letter("Kurde, wyglada na to, ze twoje rozwiazanie ma sens. "
+                                           "Przesylam rozszyfrowane plany chlopakom. Swietna robota mlody. ");
+                    cout << "[MISJA ZAKONCZONA SUKCESEM]" << endl;
+                    cout << "Zdobywasz 100xp." << endl;
+                    cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
+                    player.experience += 100;
+
+                } else {
+                    cout << "Starszy Strazak Franek: ";
+                    print_letter_by_letter("Cos mi tu nie gra. Sprobuj jeszcze raz.");
+                }
+            }
+
+        }
+    }
+
+}
+
+void RescueCivilianMission(Firefighter &player){
+    random_device rd;
+    mt19937 gen(rd());
+
+    uniform_int_distribution<> dis(1, 3);
+
+    int mission_number = dis(gen);
+
+    switch (mission_number) {
+        case 1:
+            RCMission1(player);
+            break;
+        case 2:
+            cout << "case 2";
+            break;
+        case 3:
+            cout << "case 3";
+            break;
+    }
 
 }
 
@@ -264,6 +348,7 @@ int main() {
 
     }
     // PROLOGUE
+    player.experience ++; // skipping prologue
         if (player.experience == 0){
             system("cls");
             print_letter_by_letter("Witaj w miescie Pyroklas!");
@@ -369,7 +454,7 @@ int main() {
 
         switch (choice) {
             case 1:
-                RescueCivilianMission();
+                RescueCivilianMission(player);
                 break;
             case 2:
                 SaveCityMission();
