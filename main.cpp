@@ -143,6 +143,7 @@ int fight(Firefighter &player, Dragon &dragon) {
         uniform_int_distribution<> dis2(static_cast<int>(dragon.damage * 0.75), static_cast<int>(dragon.damage * 1.25));
         int real_dragon_damage = dis2(gen);
 
+        // Uzycie apteczki lub atak smoka
         if (usemedkit){
             player.health = player.max_health;
             cout << "Uzywasz apteczki." << endl;
@@ -154,16 +155,18 @@ int fight(Firefighter &player, Dragon &dragon) {
         }
 
 
-        player.health -= real_dragon_damage;
-        if (player.health <= 0 && dragon.name == "NIKCZEMNIUCH"){
-            cout << "Starszy Strazak Franciszek zadaje 54 obrazen smokowi!" << endl;
-            cout << "Poziom zdrowia przeciwnika: " << dragon.health - 54 << "/" << max_dragon_health  << endl;
+        // Sprawdzenie czy gracz przegrywa w walce z pierwszym smokiem
+        if (player.health - real_dragon_damage <= 0 && dragon.name == "NIKCZEMNIUCH"){
+            cout << "Starszy Strazak Franciszek zadaje 35 obrazen smokowi!" << endl;
+            cout << "Poziom zdrowia przeciwnika: " << dragon.health - 35 << "/" << max_dragon_health  << endl;
             cout << "Zwyciestwo! Zdobywasz: 10xp" << endl;
             cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
             cin.get();
             return -1;
 
         }
+
+        player.health -= real_dragon_damage;
         cout << dragon.name << " atakuje zadajac " << real_dragon_damage << " obrazen!" << endl << endl;
         cout << "Poziom twojego zdrowia: " << player.health << "/" << player.max_health << endl;
         cout << "Poziom zdrowia przeciwnika: " << dragon.health << "/" << max_dragon_health << endl;
@@ -186,7 +189,7 @@ int fight(Firefighter &player, Dragon &dragon) {
 void print_letter_by_letter(string string){
     for (int i = 0; i < string.length(); i ++){
         cout << string[i] << flush;
-        sleep(50);
+//        sleep(50);
     }
     cout << endl;
 }
@@ -216,6 +219,18 @@ void showEquiment(Firefighter &player){
     }
     cout << "Bomby wodne (szt): " << player.waterBomb_amt << endl;
     cout << "Apteczki (szt):" << player.medkits << endl;
+}
+
+void RescueCivilianMission(){
+
+}
+
+void HuntForDragonMission(){
+
+}
+
+void SaveCityMission(){
+
 }
 
 int main() {
@@ -248,9 +263,7 @@ int main() {
         }
 
     }
-
-    bool gameOver = false;
-    while (!gameOver) {
+    // PROLOGUE
         if (player.experience == 0){
             system("cls");
             print_letter_by_letter("Witaj w miescie Pyroklas!");
@@ -347,21 +360,28 @@ int main() {
 
 
         }
+        // MAIN GAME LOOP
+    bool gameOver = false;
+    while (!gameOver) {
         cout << "\n[Wybierz akcje]\n1. Misja ratunkowa\n2. Gaszenie pozaru\n3. Polowanie na smoki\n4. Zapisz gre\n5. Wyswietl ekwipunek\n0. Wyjscie z gry\n";
 
         int choice = getChoice();
 
         switch (choice) {
             case 1:
-                if (fight(player,Burzogniew) < 0){
-                    gameOver = true;
-                }
+                RescueCivilianMission();
                 break;
             case 2:
-                player.useExtinguisher();
+                SaveCityMission();
                 break;
             case 3:
-                player.rescueCivilian();
+                HuntForDragonMission();
+                break;
+            case 4:
+                cout << "Coming soon..." << endl;
+                break;
+            case 5:
+                showEquiment(player);
                 break;
             case 0:
                 gameOver = true;
