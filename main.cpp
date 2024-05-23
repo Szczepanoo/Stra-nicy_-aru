@@ -216,7 +216,7 @@ int fight(Firefighter &player, Dragon &dragon) {
 void print_letter_by_letter(string string){
     for (int i = 0; i < string.length(); i ++){
         cout << string[i] << flush;
-//         sleep(50);
+         sleep(50);
     }
     cout << endl;
 }
@@ -356,7 +356,7 @@ void RCMission2(Firefighter &player){
     print_letter_by_letter("Jestesmy! Ktoredy mozna wejsc do srodka?");
     cout << "Uczen Tomek: ";
     print_letter_by_letter("Najprosciej glownym wejsciem, ale jest zawalone! Z tylu jest jeszcze wejscie dla personelu. "
-                           "Od niedawna zamotnowany jest tam nowy zamek i do otwarcia drzwi potrzebny jest KOD. "
+                           "Od niedawna zamontowany jest tam nowy zamek i do otwarcia drzwi potrzebny jest KOD. "
                            "Pan Dyrektor rozdal nam takie karteczki, gdybysmy w sytuacji awaryjnej potrzebowali otworzyc te drzwi, "
                            "podobno kod jest na nich zapisany, ale ja tego nie rozumiem: ");
 
@@ -419,10 +419,10 @@ void SCMission1(Firefighter &player){
     cout << "[PYROKLAS - DZIELNICA PRZEMYSLOWA]" << endl;
     sleep(2000);
     cout << "Starszy Strazak Franciszek: ";
-    print_letter_by_letter("O nie! Jeden z zaworow doprowadzajacych wode do tego budynku ulegl awarii!"
-                           "Musimy przekierowac wode w taki sposb, aby ominac uszkodzony zawor!"
+    print_letter_by_letter("O nie! Jeden z zaworow doprowadzajacych wode do tego budynku ulegl awarii! "
+                           "Musimy przekierowac wode w taki sposob, aby ominac uszkodzony zawor! "
                            "Mlody, ustaw wszsytkie zawory w taki sposob, by tylko te na drodze od hydranta do budynku byly otwarte, "
-                           "a pozostale zamkniete. Zawor otwarty jest oznaczy litera O, zamkniety Z."
+                           "a pozostale zamkniete. Zawor otwarty jest oznaczony litera O, zamkniety Z. "
                            "\nAktualny schemat rurociagow wyglada tak: ");
     sleep(1000);
     cout << endl << endl;
@@ -519,7 +519,7 @@ void HuntForDragonMission(Firefighter &player){
 }
 
 int main() {
-    Dragon Nikczemniuch("NIKCZEMNIUCH",600,35);
+    Dragon Nikczemniuch("NIKCZEMNIUCH",600,20);
     Dragon Burzogniew("BURZOGNIEW",100,50);
     Dragon Pyros("PYROS",500,70);
     Dragon Zguba_Miast("ZGUBA MIAST",700,90);
@@ -552,8 +552,8 @@ int main() {
     // PROLOGUE
     // player.experience ++; // skipping prologue
         if (player.experience == 0){
+            player.waterBomb_lvl ++;
             player.waterBomb_amt += 3;
-            player.waterBomb_lvl += 1;
             system("cls");
             print_letter_by_letter("Witaj w miescie Pyroklas!");
             sleep(500);
@@ -648,7 +648,7 @@ int main() {
                                    "Z naszych ustalen wynika, ze w miescie grasuja 4 smoki, no teraz to juz 3 i Wladca Zaru - prawdopodobnie"
                                    "rowniez smok - najpotezniejszy i najsilniejszy ze wszystkich. "
                                    "Mysle, ze polowanie na smoki to aktualnie zly wybor, ale decyzja nalezy do Ciebie. "
-                                   "Czym chesz sie teraz zajac?");
+                                   "Czym chcesz sie teraz zajac?");
 
 
         }
