@@ -205,7 +205,7 @@ int fight(Firefighter &player, Dragon &dragon) {
 void print_letter_by_letter(string string){
     for (int i = 0; i < string.length(); i ++){
         cout << string[i] << flush;
-         sleep(50);
+//         sleep(50);
     }
     cout << endl;
 }
@@ -411,31 +411,56 @@ void SCMission1(Firefighter &player){
                            "a pozostale zamkniete. Zawor otwarty jest oznaczy litera O, zamkniety Z."
                            "\nAktualny schemat rurociagow wyglada tak: ");
     cout << endl << endl;
-    cout << "Hydrant -> [Zawor 1] -> [AWARIA (X/X)] -> [Zawor 2] -> [Zawor 3] -> Budynek" << endl;
+    cout << "Hydrant -> [Zawor 1] -> [AWARIA (X/X)] -> [Zawor 6] -> [Zawor 7] -> Budynek" << endl;
     cout << "        \\                                             /" << endl;
-    cout << "          [Zawor 4] -> [Zawor 5] -> [Zawor 6] -> [Zawor 7]" << endl;
+    cout << "          [Zawor 2] -> [Zawor 3] -> [Zawor 4] -> [Zawor 5]" << endl;
 
-    string sequence = "ZZOOOOO";
-    string user_sequence = "";
+    string sequence = "ZOOOOZO";
     bool sequence_correct = false;
     while (!sequence_correct) {
+        cout << endl;
+        string user_sequence = "";
         for (int i = 1; i <= 7; i++) {
             string user_input;
             cout << "Zawor " << i << " (O/Z): ";
             cin >> user_input;
             user_sequence += user_input;
         }
-
+        cout << endl;
         string upper_user_sequence = toUpperCase(user_sequence);
         if (sequence == upper_user_sequence){
-            cout << "Dobra robota mlody!" << endl;
+            cout << "Starszy Strazak Franciszek: ";
+            cout << "Dobra robota mlody! Mozemy teraz ugasic ten budynek!" << endl;
             sequence_correct = true;
         } else {
+            cout << "Starszy Strazak Franciszek: ";
             cout << "Woda wciaz nie doplywa do budynku. Sprobuj jeszcze raz!";
         }
     }
 
-    cout << "Misja zakonczona"<< endl;
+    cout << endl << "[MISJA ZAKONCZONA SUKCESEM]" << endl;
+    cout << "Zdobywasz: 210xp." << endl;
+    cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
+    player.experience += 210;
+    if (player.waterBomb_lvl == 0){
+        sleep(3000);
+        cout << "Starszy Strazak Franciszek" << endl;
+        print_letter_by_letter("Ej mlody zobacz na to! Widzisz te mala skrzyneczke? Tam pod gruzami.");
+        sleep(1000);
+        print_letter_by_letter("Sprobojemy ja otworzyc?");
+        cout << "[TRZASSK!]" << endl;
+        print_letter_by_letter("Ha! Tak wlasnie myslalem! TO BOMBY WODNE! Wez sobie troche.");
+        cout << "[+] DODANO BOMBY WODNE: 3" << endl;
+        sleep(500);
+        player.waterBomb_lvl += 1;
+        player.waterBomb_amt += 3;
+        cout << "Starszy Strazak Franciszek" << endl;
+        print_letter_by_letter("To bardzo potezna bron, ktora swietnie sprawdza sie w walce ze Smokami. "
+                               "Obrazenia jakie zadaja sa zalezne od stanu zdrowia przeciwnika. "
+                               "Kilka takich sztuk wystarczy, aby oslabic bestie i dobic salwa z gasnicy. ");
+        cout << "Nacisnij ENTER, aby kontynouwac..." << endl;
+        sleep(2000);
+    }
 
 }
 
@@ -485,8 +510,6 @@ int main() {
     Dragon Wladca_Zaru("WLADCA ZARU", 1000, 250);
     Firefighter player;
 
-    SCMission1(player);
-
     bool showMenu = true;
     cout << "Straznicy Zaru: Ognisty Konflikt" << endl;
     while (showMenu) {
@@ -511,7 +534,7 @@ int main() {
 
     }
     // PROLOGUE
-    // player.experience ++; // skipping prologue
+    player.experience ++; // skipping prologue
         if (player.experience == 0){
             system("cls");
             print_letter_by_letter("Witaj w miescie Pyroklas!");
