@@ -64,6 +64,17 @@ int getChoice(){
     return choice;
 }
 
+string toUpperCase(const string& input) {
+    string result = input;
+
+    for (char& c : result) {
+        c = toupper(c);
+    }
+
+    return result;
+}
+
+
 string encryptCaesar(const string& text, int shift) {
     string result = "";
 
@@ -194,7 +205,7 @@ int fight(Firefighter &player, Dragon &dragon) {
 void print_letter_by_letter(string string){
     for (int i = 0; i < string.length(); i ++){
         cout << string[i] << flush;
-        // sleep(50);
+         sleep(50);
     }
     cout << endl;
 }
@@ -369,7 +380,7 @@ void RescueCivilianMission(Firefighter &player){
     random_device rd;
     mt19937 gen(rd());
 
-    uniform_int_distribution<> dis(1, 3);
+    uniform_int_distribution<> dis(1, 2);
 
     int mission_number = dis(gen);
 
@@ -379,7 +390,6 @@ void RescueCivilianMission(Firefighter &player){
             break;
         case 2:
             RCMission2(player);
-            cout << "case 2";
             break;
         case 3:
             cout << "case 3";
@@ -388,23 +398,94 @@ void RescueCivilianMission(Firefighter &player){
 
 }
 
-void HuntForDragonMission(){
+
+void SCMission1(Firefighter &player){
+    cout << "Starszy Strazak Franciszek: ";
+    print_letter_by_letter("Szybko mlody. Wskakuj do samochodu! Wybuchl pozar w dzielnicy przemyslowej!");
+    cout << "[PYROKLAS - DZIELNICA PRZEMYSLOWA]" << endl;
+    sleep(2000);
+    cout << "Starszy Strazak Franciszek: ";
+    print_letter_by_letter("O nie! Jeden z zaworow doprowadzajacych wode do tego budynku ulegl awarii!"
+                           "Musimy przekierowac wode w taki sposb, aby ominac uszkodzony zawor!"
+                           "Mlody, ustaw wszsytkie zawory w taki sposob, by tylko te na drodze od hydranta do budynku byly otwarte, "
+                           "a pozostale zamkniete. Zawor otwarty jest oznaczy litera O, zamkniety Z."
+                           "\nAktualny schemat rurociagow wyglada tak: ");
+    cout << endl << endl;
+    cout << "Hydrant -> [Zawor 1] -> [AWARIA (X/X)] -> [Zawor 2] -> [Zawor 3] -> Budynek" << endl;
+    cout << "        \\                                             /" << endl;
+    cout << "          [Zawor 4] -> [Zawor 5] -> [Zawor 6] -> [Zawor 7]" << endl;
+
+    string sequence = "ZZOOOOO";
+    string user_sequence = "";
+    bool sequence_correct = false;
+    while (!sequence_correct) {
+        for (int i = 1; i <= 7; i++) {
+            string user_input;
+            cout << "Zawor " << i << " (O/Z): ";
+            cin >> user_input;
+            user_sequence += user_input;
+        }
+
+        string upper_user_sequence = toUpperCase(user_sequence);
+        if (sequence == upper_user_sequence){
+            cout << "Dobra robota mlody!" << endl;
+            sequence_correct = true;
+        } else {
+            cout << "Woda wciaz nie doplywa do budynku. Sprobuj jeszcze raz!";
+        }
+    }
+
+    cout << "Misja zakonczona"<< endl;
 
 }
 
-void SaveCityMission(){
+
+
+void SCMission2(Firefighter &player){
+
+
+
+
+}
+
+
+
+
+void SaveCityMission(Firefighter &player){
+    random_device rd;
+    mt19937 gen(rd());
+
+    uniform_int_distribution<> dis(1, 2);
+
+    int mission_number = dis(gen);
+
+    switch (mission_number) {
+        case 1:
+            SCMission1(player);
+            break;
+        case 2:
+            SCMission2(player);
+            break;
+        case 3:
+            cout << "case 3";
+            break;
+    }
+}
+
+
+void HuntForDragonMission(Firefighter &player){
 
 }
 
 int main() {
     Dragon Nikczemniuch("NIKCZEMNIUCH",60,35);
-    Dragon Burzogniew("BURZOGNIEW",1000,70);
-    Dragon Pyros("PYROS",5000,90);
-    Dragon Zguba_Miast("ZGUBA MIAST",7000,100);
-    Dragon Wladca_Zaru("WLADCA ZARU", 10000, 250);
+    Dragon Burzogniew("BURZOGNIEW",100,70);
+    Dragon Pyros("PYROS",500,90);
+    Dragon Zguba_Miast("ZGUBA MIAST",700,100);
+    Dragon Wladca_Zaru("WLADCA ZARU", 1000, 250);
     Firefighter player;
 
-    RCMission2(player);
+    SCMission1(player);
 
     bool showMenu = true;
     cout << "Straznicy Zaru: Ognisty Konflikt" << endl;
@@ -430,10 +511,10 @@ int main() {
 
     }
     // PROLOGUE
-    player.experience ++; // skipping prologue
+    // player.experience ++; // skipping prologue
         if (player.experience == 0){
             system("cls");
-            print_letter_by_letter("Witaj w miescie Pyroklesie!");
+            print_letter_by_letter("Witaj w miescie Pyroklas!");
             sleep(500);
             print_letter_by_letter("Codzienne zycie splata sie tu z cieniem niebezpieczenstwa unoszacego sie w powietrzu. "
                                    "W miasteczku, gdzie smoki nie sa legenda, ale rzeczywistoscia. "
@@ -530,7 +611,7 @@ int main() {
         // MAIN GAME LOOP
     bool gameOver = false;
     while (!gameOver) {
-        cout << "\n[Wybierz akcje]\n1. Misja ratunkowa\n2. Gaszenie pozaru\n3. Polowanie na smoki\n4. Zapisz gre\n5. Wyswietl ekwipunek\n0. Wyjscie z gry\n";
+        cout << "\n[Wybierz akcje]\n1. Misja ratunkowa\n2. Gaszenie pozaru\n3. Polowanie na smoki\n4. Wyswietl ekwipunek\n5. Zapisz gre\n0. Wyjscie z gry\n";
 
         int choice = getChoice();
 
@@ -539,16 +620,16 @@ int main() {
                 RescueCivilianMission(player);
                 break;
             case 2:
-                SaveCityMission();
+                SaveCityMission(player);
                 break;
             case 3:
-                HuntForDragonMission();
+                HuntForDragonMission(player);
                 break;
             case 4:
-                cout << "Coming soon..." << endl;
+                showEquiment(player);
                 break;
             case 5:
-                showEquiment(player);
+                cout << "Coming soon..." << endl;
                 break;
             case 0:
                 gameOver = true;
