@@ -274,11 +274,11 @@ void RCMission1(Firefighter &player){
                     print_letter_by_letter("Kurde, wyglada na to, ze twoje rozwiazanie ma sens. "
                                            "Przesylam rozszyfrowane plany chlopakom. Swietna robota mlody. ");
                     cout << endl << "[MISJA ZAKONCZONA SUKCESEM]" << endl;
-                    cout << "Zdobywasz: 100xp." << endl;
-                    cout << "Zdobyto punkty respektu: 150" << endl;
+                    cout << "Zdobywasz: 130xp." << endl;
+                    cout << "Zdobyto punkty respektu: 250" << endl;
                     cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
-                    player.experience += 100;
-                    player.respect_points += 150;
+                    player.experience += 130;
+                    player.respect_points += 250;
 
                 } else {
                     cout << "Starszy Strazak Franek: ";
@@ -325,19 +325,21 @@ void RCMission2(Firefighter &player){
     sleep(3000);
     cout << "[SZKOLA PODSTAWOWA W PYROKLESIE]" << endl;
     sleep(1000);
-    cout << "Uczen Osmej Klasy: ";
+    cout << "Uczen Tomek: ";
     print_letter_by_letter("RAATUUNKUU!! POMOCYYY!!!");
     cout << "Starszy Strazak Franciszek: ";
     print_letter_by_letter("Jestesmy! Ktoredy mozna wejsc do srodka?");
-    cout << "Uczen Osmej Klasy: ";
-    print_letter_by_letter("Najprosciej glownym wejsciem, ale jest zawalone! Z tylu jest jeszcze wejscie dla personelu."
-                           "Pan Dyrektor rozdal nam takie karteczki, podobno jest na nich kod do drzwi, ale ja nie potrafie go odczytac: ");
+    cout << "Uczen Tomek: ";
+    print_letter_by_letter("Najprosciej glownym wejsciem, ale jest zawalone! Z tylu jest jeszcze wejscie dla personelu. "
+                           "Od niedawna zamotnowany jest tam nowy zamek i do otwarcia drzwi potrzebny jest KOD. "
+                           "Pan Dyrektor rozdal nam takie karteczki, gdybysmy w sytuacji awaryjnej potrzebowali otworzyc te drzwi, "
+                           "podobno kod jest na nich zapisany, ale ja tego nie rozumiem: ");
 
     cout << endl << poems[poem_index] << endl;
 
     cout << "Starszy Strazak Franciszek: ";
     print_letter_by_letter("Jak mozna rozdac uczniom kartki z zaszyfrowanym kodem do awaryjnego wejscia?! "
-                           "Mlody, masz pomysl jaki jest ten kod? ");
+                           "Mlody, potrafisz odczytac kod z tego tekstu? ");
 
     bool code_correct = false;
     while (!code_correct) {
@@ -351,8 +353,9 @@ void RCMission2(Firefighter &player){
         }
     }
     cout << "Starszy Strazak Franciszek: ";
-    print_letter_by_letter("Brawo mlody. Swietnie sie spisales!");
+    print_letter_by_letter("Udalo sie! Drzwi otwarte! Wchodzimy! Swietnie sie spisales, mlody!");
 
+    cout << endl << "[MISJA ZAKONCZONA SUKCESEM]" << endl;
     cout << "Zdobywasz: 100xp." << endl;
     cout << "Zdobyto punkty respektu: 150" << endl;
     cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
@@ -400,6 +403,9 @@ int main() {
     Dragon Zguba_Miast("ZGUBA MIAST",7000,100);
     Dragon Wladca_Zaru("WLADCA ZARU", 10000, 250);
     Firefighter player;
+
+    RCMission2(player);
+
     bool showMenu = true;
     cout << "Straznicy Zaru: Ognisty Konflikt" << endl;
     while (showMenu) {
