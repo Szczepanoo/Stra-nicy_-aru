@@ -41,9 +41,10 @@ public:
     int waterBomb_lvl;
     int waterBomb_amt;
     int medkits;
+    int respect_points;
 
 
-    Firefighter() : name(""), health(120), max_health(120), experience(0), extinguisher_lvl(0), waterBomb_lvl(0), waterBomb_amt(0), medkits(0){}
+    Firefighter() : name(""), health(120), max_health(120), experience(0), extinguisher_lvl(0), waterBomb_lvl(0), waterBomb_amt(0), medkits(0), respect_points(0){}
 
 };
 
@@ -163,6 +164,7 @@ int fight(Firefighter &player, Dragon &dragon) {
             cout << "Starszy Strazak Franciszek zadaje 35 obrazen smokowi!" << endl;
             cout << "Poziom zdrowia przeciwnika: " << dragon.health - 35 << "/" << max_dragon_health  << endl;
             cout << "Zwyciestwo! Zdobywasz: 10xp" << endl;
+            player.experience += 10;
             cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
             cin.get();
             return -1;
@@ -181,7 +183,7 @@ int fight(Firefighter &player, Dragon &dragon) {
             return -1;
         } else if (dragon.health <= 0) {
             cout << "Zwyciestwo! Zdobywasz: "<< max_dragon_health << "xp." << endl;
-            player.experience+= max_dragon_health;
+            player.experience += max_dragon_health;
             cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
             cin.get();
             return 1;
@@ -192,7 +194,7 @@ int fight(Firefighter &player, Dragon &dragon) {
 void print_letter_by_letter(string string){
     for (int i = 0; i < string.length(); i ++){
         cout << string[i] << flush;
-//        sleep(50);
+        // sleep(50);
     }
     cout << endl;
 }
@@ -229,27 +231,27 @@ void RCMission1(Firefighter &player){
     random_device rd;
     mt19937 gen(rd());
 
-    uniform_int_distribution<> dis(1, 3);
+    uniform_int_distribution<> dis(0, 2);
     uniform_int_distribution<> dis2(1,25);
 
     int string_index = dis(gen);
     int key = dis2(gen);
 
-    array<string, 3> strings = {
+    array<string, 3> sentences = {
             "W mrocznych zakamarkach gdzie cienie tancza w rytm ukrytych prawd poszukaj kryjowki skrytej pod kamieniem ktory nosi na sobie slady czasu.",
             "Pod plomieniami dnia na skraju zapomnianej rzeki odkryj wejscie do podziemnego labiryntu ktorego wejscie strzeze zardzewialy klucz.",
             "W miejscu gdzie kamienie szepcza opowiesci o dawnych czasach zanurz sie w mrocznej studni ktora ukrywa droge do zagubionego swiata podziemnego."
     };
 
-    string encrypted_string = encryptCaesar(strings[string_index],key);
+    string encrypted_string = encryptCaesar(sentences[string_index],key);
 
     cout << "Starszy Strazak Franciszek: ";
-    print_letter_by_letter("Brygada jest juz w drodze na ratunek cywili w zawalonym szpitale. "
+    print_letter_by_letter("Brygada jest juz w drodze na ratunek cywili w zawalonym szpitalu. "
                            "Ze wzgledu na zniszczenia tradycyjne wejscie do budynku odpada. "
                            "Udalo nam sie pozyskac plany kanalow, tylko problem w tym ze sa zaszyfrowane. "
                            "Musisz okreslic jaki jest klucz tego szyfru. Wstepnie ustalilismy ze jest to liczba miedzy 1 a 25. "
                            "Fragmenty planu wygladaja nastepujaco: ");
-    cout << endl << encrypted_string << endl;
+    cout << endl << encrypted_string << endl << endl;
 
     bool mission_completed = false;
     while (!mission_completed) {
@@ -259,7 +261,7 @@ void RCMission1(Firefighter &player){
             cout << "Nieprawidlowy klucz." << endl;
         } else {
             cout << "Fragment po zastosowaniu podanego klucza: " << endl;
-            cout << decryptCaesar(encrypted_string, user_key) << endl;
+            cout << decryptCaesar(encrypted_string, user_key) << endl << endl;
 
             cout << "[Wybierz akcje]" << endl;
             cout << "1. Zatwierdz" << endl;
@@ -271,10 +273,12 @@ void RCMission1(Firefighter &player){
                     cout << "Starszy Strazak Franek: ";
                     print_letter_by_letter("Kurde, wyglada na to, ze twoje rozwiazanie ma sens. "
                                            "Przesylam rozszyfrowane plany chlopakom. Swietna robota mlody. ");
-                    cout << "[MISJA ZAKONCZONA SUKCESEM]" << endl;
-                    cout << "Zdobywasz 100xp." << endl;
+                    cout << endl << "[MISJA ZAKONCZONA SUKCESEM]" << endl;
+                    cout << "Zdobywasz: 100xp." << endl;
+                    cout << "Zdobyto punkty respektu: 150" << endl;
                     cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
                     player.experience += 100;
+                    player.respect_points += 150;
 
                 } else {
                     cout << "Starszy Strazak Franek: ";
@@ -284,6 +288,77 @@ void RCMission1(Firefighter &player){
 
         }
     }
+
+}
+
+void RCMission2(Firefighter &player){
+    random_device rd;
+    mt19937 gen(rd());
+
+    uniform_int_distribution<> dis(0, 2);
+    int poem_index = dis(gen);
+    array<string,3> poems = {
+            "W starym lesie, tam gdzie dab jeden stoi,\n"
+            "Czeka tajemnica, ktora swiat odkryc boi.\n"
+            "Dwanascie godzin zegar wybija,\n"
+            "Dziewiec marzen w sercach sie rozwija.\n"
+            ,
+            "Dwa strumyki plyna, ich spiew to cud,\n"
+            "Trzy slonca blask wsrod lesnych wrot.\n"
+            "Szesc jeleni biega wsrod cieni,\n"
+            "Piec gwiazd blyszczy w nocnej przestrzeni.\n"
+            ,
+            "Szesc lisci spadlo z drzewa wysokiego,\n"
+            "Osiem razy uslyszysz echo glosu swojego.\n"
+            "Dwadziescia lat minelo jak jeden dzien,\n"
+            "A w starym lesie wciaz tajemnic cien.\n"
+    };
+
+    array<int,3> codes = {
+            1129,
+            2365,
+            6820
+    };
+
+    cout << "Starszy Strazak Franciszek: ";
+    print_letter_by_letter("Szybko mlody! Jeden ze smokow zaatakowal SZKOLE! Pakuj sie do samochodu! Ruszamy! ");
+    sleep(3000);
+    cout << "[SZKOLA PODSTAWOWA W PYROKLESIE]" << endl;
+    sleep(1000);
+    cout << "Uczen Osmej Klasy: ";
+    print_letter_by_letter("RAATUUNKUU!! POMOCYYY!!!");
+    cout << "Starszy Strazak Franciszek: ";
+    print_letter_by_letter("Jestesmy! Ktoredy mozna wejsc do srodka?");
+    cout << "Uczen Osmej Klasy: ";
+    print_letter_by_letter("Najprosciej glownym wejsciem, ale jest zawalone! Z tylu jest jeszcze wejscie dla personelu."
+                           "Pan Dyrektor rozdal nam takie karteczki, podobno jest na nich kod do drzwi, ale ja nie potrafie go odczytac: ");
+
+    cout << endl << poems[poem_index] << endl;
+
+    cout << "Starszy Strazak Franciszek: ";
+    print_letter_by_letter("Jak mozna rozdac uczniom kartki z zaszyfrowanym kodem do awaryjnego wejscia?! "
+                           "Mlody, masz pomysl jaki jest ten kod? ");
+
+    bool code_correct = false;
+    while (!code_correct) {
+        cout << "Twoja odpowiedz: ";
+        int user_code = getChoice();
+        if (user_code == codes[poem_index]){
+            code_correct = true;
+        } else {
+            cout << "Starszy Strazak Franciszek: ";
+            print_letter_by_letter("Ten kod nie dziala. Sprobujmy innego.");
+        }
+    }
+    cout << "Starszy Strazak Franciszek: ";
+    print_letter_by_letter("Brawo mlody. Swietnie sie spisales!");
+
+    cout << "Zdobywasz: 100xp." << endl;
+    cout << "Zdobyto punkty respektu: 150" << endl;
+    cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
+    player.experience += 100;
+    player.respect_points += 150;
+
 
 }
 
@@ -300,6 +375,7 @@ void RescueCivilianMission(Firefighter &player){
             RCMission1(player);
             break;
         case 2:
+            RCMission2(player);
             cout << "case 2";
             break;
         case 3:
@@ -351,7 +427,7 @@ int main() {
     player.experience ++; // skipping prologue
         if (player.experience == 0){
             system("cls");
-            print_letter_by_letter("Witaj w miescie Pyroklas!");
+            print_letter_by_letter("Witaj w miescie Pyroklesie!");
             sleep(500);
             print_letter_by_letter("Codzienne zycie splata sie tu z cieniem niebezpieczenstwa unoszacego sie w powietrzu. "
                                    "W miasteczku, gdzie smoki nie sa legenda, ale rzeczywistoscia. "
@@ -371,7 +447,7 @@ int main() {
             sleep(500);
             cout << "Starszy Strazak Franciszek: ";
             print_letter_by_letter("W tych czasach kazdy z nas nosi pod reka swoja gasnice. "
-                                   "To narzedzie ktore najlepiej sprawdza sie w ratowaniu cywili, ale od biedy moze tez "
+                                   "To narzedzie ktore najlepiej sprawdza sie w gaszeniu pozarow, ale od biedy moze tez "
                                    "sluzyc w walce ze smokami.");
             sleep(1000);
             cout << "Starszy Strazak Franciszek: ";
