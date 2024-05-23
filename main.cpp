@@ -213,6 +213,7 @@ void print_letter_by_letter(string string){
 void showEquiment(Firefighter &player){
     cout << endl << "[" << player.name << "]" << endl;
     cout << "Doswiadczenie: " << player.experience << endl;
+    cout << "Punkty Respektu: " << player.respect_points << endl;
     cout << "Stan zdrowia: "<< player.health << "/" << player.max_health << endl;
     switch (player.extinguisher_lvl) {
         case 1:
@@ -234,7 +235,9 @@ void showEquiment(Firefighter &player){
             cout << "Gasnica: BRAK" << endl;
             break;
     }
-    cout << "Bomby wodne (szt): " << player.waterBomb_amt << endl;
+    if (player.waterBomb_lvl > 0) {
+        cout << "Bomby wodne (szt): " << player.waterBomb_amt << endl;
+    }
     cout << "Apteczki (szt): " << player.medkits << endl;
 }
 
@@ -410,6 +413,7 @@ void SCMission1(Firefighter &player){
                            "Mlody, ustaw wszsytkie zawory w taki sposob, by tylko te na drodze od hydranta do budynku byly otwarte, "
                            "a pozostale zamkniete. Zawor otwarty jest oznaczy litera O, zamkniety Z."
                            "\nAktualny schemat rurociagow wyglada tak: ");
+    sleep(1000);
     cout << endl << endl;
     cout << "Hydrant -> [Zawor 1] -> [AWARIA (X/X)] -> [Zawor 6] -> [Zawor 7] -> Budynek" << endl;
     cout << "        \\                                             /" << endl;
@@ -444,17 +448,18 @@ void SCMission1(Firefighter &player){
     player.experience += 210;
     if (player.waterBomb_lvl == 0){
         sleep(3000);
-        cout << "Starszy Strazak Franciszek" << endl;
+        cout << "Starszy Strazak Franciszek: ";
         print_letter_by_letter("Ej mlody zobacz na to! Widzisz te mala skrzyneczke? Tam pod gruzami.");
         sleep(1000);
         print_letter_by_letter("Sprobojemy ja otworzyc?");
+        sleep(2000);
         cout << "[TRZASSK!]" << endl;
         print_letter_by_letter("Ha! Tak wlasnie myslalem! TO BOMBY WODNE! Wez sobie troche.");
         cout << "[+] DODANO BOMBY WODNE: 3" << endl;
-        sleep(500);
+        sleep(1000);
         player.waterBomb_lvl += 1;
         player.waterBomb_amt += 3;
-        cout << "Starszy Strazak Franciszek" << endl;
+        cout << "Starszy Strazak Franciszek: ";
         print_letter_by_letter("To bardzo potezna bron, ktora swietnie sprawdza sie w walce ze Smokami. "
                                "Obrazenia jakie zadaja sa zalezne od stanu zdrowia przeciwnika. "
                                "Kilka takich sztuk wystarczy, aby oslabic bestie i dobic salwa z gasnicy. ");
