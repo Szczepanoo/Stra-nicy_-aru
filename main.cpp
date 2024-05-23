@@ -124,7 +124,18 @@ int fight(Firefighter &player, Dragon &dragon) {
                     break;
                 case 2:
                     if (player.waterBomb_lvl > 0 && player.waterBomb_amt > 0){
-                        base_player_damage = -10;
+                        switch (player.waterBomb_lvl) {
+                            case 1:
+                                base_player_damage = dragon.health / 2;
+                                break;
+                            case 2:
+                                base_player_damage = (dragon.health * 6) / 10;
+                                break;
+                            case 3:
+                                base_player_damage = (dragon.health * 7) / 10;
+                                break;
+                        }
+                        player.waterBomb_amt--;
                         choice_accepted = true;
                     } else {
                         cout << "Nieprawidlowy wybor." << endl;
@@ -158,7 +169,7 @@ int fight(Firefighter &player, Dragon &dragon) {
         uniform_int_distribution<> dis2(static_cast<int>(dragon.damage * 0.75), static_cast<int>(dragon.damage * 1.25));
         int real_dragon_damage = dis2(gen);
 
-        // Uzycie apteczki lub atak smoka
+        // Uzycie apteczki lub atak na smoka
         if (usemedkit){
             player.health = player.max_health;
             cout << "Uzywasz apteczki." << endl;
@@ -508,11 +519,11 @@ void HuntForDragonMission(Firefighter &player){
 }
 
 int main() {
-    Dragon Nikczemniuch("NIKCZEMNIUCH",60,35);
-    Dragon Burzogniew("BURZOGNIEW",100,70);
-    Dragon Pyros("PYROS",500,90);
-    Dragon Zguba_Miast("ZGUBA MIAST",700,100);
-    Dragon Wladca_Zaru("WLADCA ZARU", 1000, 250);
+    Dragon Nikczemniuch("NIKCZEMNIUCH",600,35);
+    Dragon Burzogniew("BURZOGNIEW",100,50);
+    Dragon Pyros("PYROS",500,70);
+    Dragon Zguba_Miast("ZGUBA MIAST",700,90);
+    Dragon Wladca_Zaru("WLADCA ZARU", 1000, 120);
     Firefighter player;
 
     bool showMenu = true;
@@ -539,8 +550,10 @@ int main() {
 
     }
     // PROLOGUE
-    player.experience ++; // skipping prologue
+    // player.experience ++; // skipping prologue
         if (player.experience == 0){
+            player.waterBomb_amt += 3;
+            player.waterBomb_lvl += 1;
             system("cls");
             print_letter_by_letter("Witaj w miescie Pyroklas!");
             sleep(500);
@@ -612,10 +625,12 @@ int main() {
             int useMedkit = getChoice();
             if (useMedkit == 9){
                 player.health = player.max_health;
+                player.medkits--;
                 cout << "[PRZYWROCONO ZDROWIE]" << endl;
+                sleep(1000);
                 cout << "Starszy Strazak Franciszek: ";
                 print_letter_by_letter("No, od razu lepiej.");
-            }else {
+            } else {
                 cout << "Starszy Strazak Franciszek: ";
                 print_letter_by_letter("Nie upieram sie. Mozesz zostawic je sobie na pozniej. "
                                        "Pamietaj, ze stawanie do walki oslabionym moze sie zle skonczyc.");
@@ -623,7 +638,8 @@ int main() {
             sleep(1000);
             cout << "Starszy Strazak Franciszek: ";
             print_letter_by_letter("Przejdzmy teraz do omowienia naszych codziennych aktywnosci. "
-                                   "Standardowo wykonujemy 3 rodzaje misji: ratowanie cywili, gaszenie pozarow i polowanie na smoki. "
+                                   "Standardowo wykonujemy 2 rodzaje misji: ratowanie cywili i gaszenie pozarow. "
+                                   "Dodatkowo, kiedy juz ulepszysz wystarczajaco swoje wyposazenie, mozesz wyruszyc na polowanie na smoki. "
                                    "Kazda z misji polega na czyms innym i jest niemniej wazna od pozostalych. "
                                    "Misje ratunkowe zwiekszaja poziom bezpieczenstwa w miescie oraz nasz poziom respektu wsrod ludzi. "
                                    "Gaszenie pozarow odblokowuje dostep do zniszczonych czesci miasta, "
