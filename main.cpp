@@ -412,7 +412,7 @@ int fight(Firefighter &player, Dragon &dragon) {
                                        "potrafisz dostrzec... ze mi juz nic... nie... pomoze [YHY!] Zajmij sie mlodym... "
                                        "A ty swiezaku... wez to: ");
                 cout << "[+] DODANO PRZEDMIOT: GASNICA DOWODCY" << endl;
-                player.extinguisher_lvl ++;
+                player.extinguisher_lvl  = 3;
                 print_letter_by_letter("Tobie [YHY] przyda sie bardziej... niz mi....");
                 cout << "Starszy Strazak Franciszek: ";
                 print_letter_by_letter("SAM NIE ROB TEGO! SLYSZYSZ MNIE SAM?! SAM SAAAM!");
@@ -681,7 +681,7 @@ void SCMission1(Firefighter &player){
         print_letter_by_letter("To bardzo potezna bron, ktora swietnie sprawdza sie w walce ze Smokami. "
                                "Obrazenia jakie zadaja sa zalezne od stanu zdrowia przeciwnika. "
                                "Kilka takich sztuk wystarczy, aby oslabic bestie i dobic salwa z gasnicy. ");
-        cout << "Nacisnij ENTER, aby kontynouwac..." << endl;
+        cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
         sleep(2000);
     }
 
@@ -882,8 +882,6 @@ int main() {
     //player.experience ++; // skipping prologue
     // PROLOGUE
     if (player.experience == 0){
-            player.waterBomb_lvl ++;
-            player.waterBomb_amt += 3;
             system("cls");
             print_letter_by_letter("Witaj w miescie Pyroklas!");
             sleep(500);
@@ -975,7 +973,7 @@ int main() {
                                    "Gaszenie pozarow odblokowuje dostep do zniszczonych czesci miasta, "
                                    "w ktorych istnieje szansa na odnalezienie lepszej broni lub nowego ekwipunku. "
                                    "Polowanie na smoki to najbardziej wymagajaca misja. "
-                                   "Z naszych ustalen wynika, ze w miescie grasuja 4 smoki, no teraz to juz 3 i Wladca Zaru - prawdopodobnie"
+                                   "Z naszych ustalen wynika, ze w miescie grasuja 4 smoki, no teraz to juz 3 i Wladca Zaru - prawdopodobnie "
                                    "rowniez smok - najpotezniejszy i najsilniejszy ze wszystkich. "
                                    "Mysle, ze polowanie na smoki to aktualnie zly wybor, ale decyzja nalezy do Ciebie. "
                                    "Czym chcesz sie teraz zajac?");
