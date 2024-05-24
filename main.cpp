@@ -50,7 +50,7 @@ public:
     int wladca_zaru_hp;
 
     // Constructor with default parameters
-    Firefighter() : name(""), health(120), max_health(120), experience(0), extinguisher_lvl(0), waterBomb_lvl(0),
+    Firefighter() : health(120), max_health(120), experience(0), extinguisher_lvl(0), waterBomb_lvl(0),
     waterBomb_amt(0), medkits(0), respect_points(0), burzogniew_hp(100), pyros_hp(500), zguba_miast_hp(700), wladca_zaru_hp(1000){}
 
     Firefighter(string name, int health, int max_health, int experience,int extinguisher_lvl, int waterBomb_lvl,
@@ -101,7 +101,7 @@ public:
         }
     }
 
-    void showEquiment(){
+    void showEquiment() const{
         cout << endl << "[" << name << "]" << endl;
         cout << "Doswiadczenie: " << experience << endl;
         cout << "Punkty Respektu: " << respect_points << endl;
@@ -295,7 +295,24 @@ int fight(Firefighter &player, Dragon &dragon) {
             int choice = getChoice();
             switch (choice) {
                 case 1:
-                    base_player_damage = player.extinguisher_lvl * 10;
+                    switch (player.extinguisher_lvl) {
+                        case 1:
+                            base_player_damage = 10;
+                            break;
+                        case 2:
+                            base_player_damage = 25;
+                            break;
+                        case 3:
+                            base_player_damage = 40;
+                            break;
+                        case 4:
+                            base_player_damage = 60;
+                            break;
+                        case 5:
+                            base_player_damage = 100;
+                            break;
+                    }
+
                     choice_accepted = true;
                     break;
                 case 2:
@@ -386,12 +403,34 @@ int fight(Firefighter &player, Dragon &dragon) {
             player.experience += max_dragon_health;
             cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
             cin.get();
-            if (dragon.name != "NIKCZEMNIUCH"){
+
+            if (dragon.name == "BURZOGNIEW"){
+                cout << "Starszy Strazak Franciszek: ";
+                print_letter_by_letter("SAMUEL OBERWAL! DAJCIE APTECZKE!");
                 cout << "Dowodca Strazakow Samuel: ";
-                print_letter_by_letter("Swietnie sie spisales swiezaku. Wez to i polataj sie troche.");
+                print_letter_by_letter("Oj Franek, Franek [YHY, YHY!] Tyle lat na sluzbie... i nie "
+                                       "potrafisz dostrzec... ze mi juz nic... nie... pomoze [YHY!] Zajmij sie mlodym... "
+                                       "A ty swiezaku... wez to: ");
+                cout << "[+] DODANO PRZEDMIOT: GASNICA DOWODCY" << endl;
+                player.extinguisher_lvl ++;
+                print_letter_by_letter("Tobie [YHY] przyda sie bardziej... niz mi....");
+                cout << "Starszy Strazak Franciszek: ";
+                print_letter_by_letter("SAM NIE ROB TEGO! SLYSZYSZ MNIE SAM?! SAM SAAAM!");
+                cout << "Strazak Marcel: ";
+                print_letter_by_letter("Franek, to koniec, juz mu nie pomozemy...");
+                cout << "Starszy Strazak Franciszek: ";
+                print_letter_by_letter("Przegrupujcie sie i widzimy sie w bazie. Te smoki musza za to zaplacic...");
+                sleep(2000);
+
+            }
+
+            if (dragon.name != "NIKCZEMNIUCH"){
+                cout << "Starszy Strazak Franciszek: ";
+                print_letter_by_letter("Wez to i polataj sie troche.");
                 cout << "[+] DODANO APTECZKI: 5";
                 player.medkits += 5;
             }
+
 
 
             return 1;
@@ -556,6 +595,9 @@ void RescueCivilianMission(Firefighter &player){
             break;
         case 3:
             cout << "case 3";
+            break;
+        default:
+            cout << "[WYSTAPIL NIEZNANY BLAD]" << endl;
             break;
     }
 
@@ -756,6 +798,9 @@ void SaveCityMission(Firefighter &player){
         case 3:
             cout << "case 3";
             break;
+        default:
+            cout << "[WYSTAPIL NIEZNANY BLAD]" << endl;
+            break;
     }
 }
 
@@ -834,7 +879,7 @@ int main() {
         }
 
     }
-    player.experience ++; // skipping prologue
+    //player.experience ++; // skipping prologue
     // PROLOGUE
     if (player.experience == 0){
             player.waterBomb_lvl ++;
