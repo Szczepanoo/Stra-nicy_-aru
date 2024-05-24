@@ -6,6 +6,7 @@
 #include <array>
 #include <fstream>
 #include <sstream>
+#include <utility>
 #include <vector>
 
 using namespace std;
@@ -18,9 +19,9 @@ public:
     int health;
     int damage;
 
-    Dragon(string n, int h, int d) : name(n), health(h), damage(d) {}
+    Dragon(string n, int h, int d) : name(std::move(n)), health(h), damage(d) {}
 
-    void print_info() {
+    void print_info() const {
         cout << "[" << name << "]" << endl;
         if (name == "NIKCZEMNIUCH") {
             cout << "Sila: brak danych" << endl;
@@ -48,7 +49,7 @@ public:
     Firefighter() : name(""), health(120), max_health(120), experience(0), extinguisher_lvl(0), waterBomb_lvl(0), waterBomb_amt(0), medkits(0), respect_points(0){}
 
     Firefighter(string name, int health, int max_health, int experience, int extinguisher_lvl, int waterBomb_lvl, int waterBomb_amt, int medkits, int respect_points):
-            name(name),
+            name(std::move(name)),
             health(health),
             max_health(max_health),
             experience(experience),
@@ -58,7 +59,7 @@ public:
             medkits(medkits),
             respect_points(respect_points) {}
 
-    void saveGame() {
+    void saveGame() const {
         const string filename = "game_saves.csv";
 
         // Otwarcie pliku w trybie dopisywania
@@ -81,6 +82,38 @@ public:
         }
     }
 
+    void showEquiment(){
+        cout << endl << "[" << name << "]" << endl;
+        cout << "Doswiadczenie: " << experience << endl;
+        cout << "Punkty Respektu: " << respect_points << endl;
+        cout << "Stan zdrowia: "<< health << "/" << max_health << endl;
+        switch (extinguisher_lvl) {
+            case 1:
+                cout << "Gasnica: ZWYKLA GASNICA" << endl;
+                break;
+            case 2:
+                cout << "Gasnica: NIEPOSPOLITA GASNICA" << endl;
+                break;
+            case 3:
+                cout << "Gasnica: GASNICA DOWODCY" << endl;
+                break;
+            case 4:
+                cout << "Gasnica: LEGENDARNA GASNICA" << endl;
+                break;
+            case 5:
+                cout << "Gasnica: GASNICA ZE SMOCZEJ LUSKI" << endl;
+                break;
+            default:
+                cout << "Gasnica: BRAK" << endl;
+                break;
+        }
+        if (waterBomb_lvl > 0) {
+            cout << "Bomby wodne (poz): " << waterBomb_lvl << endl;
+            cout << "Bomby wodne (szt): " << waterBomb_amt << endl;
+        }
+        cout << "Apteczki (szt): " << medkits << endl;
+    }
+
 
 };
 
@@ -91,7 +124,7 @@ int getChoice(){
     cin >> choiceStr;
     try {
         choice = stoi(choiceStr);
-    } catch (invalid_argument){
+    } catch (invalid_argument &){
         choice = -999;
     }
     return choice;
@@ -105,6 +138,16 @@ Firefighter loadGame() {
     string line;
 
     if (file.is_open()) {
+        // Przesunięcie wskaźnika pliku na początek
+        file.seekg(0, ios::beg);
+
+        // Jezeli plik jest pusty
+        if (file.peek() == std::ifstream::traits_type::eof()){
+            cout << "[NIE ZNALEZIONO ZAPISANYCH STANOW GRY]" << endl;
+            cout << "[STWORZONO NOWA POSTAC]" << endl;
+            file.close();
+            return {};
+        }
 
         // Wczytywanie postaci
         while (getline(file, line)) {
@@ -119,7 +162,6 @@ Firefighter loadGame() {
 
             firefighters.emplace_back(name, health, max_health, experience, extinguisher_lvl, waterBomb_lvl, waterBomb_amt, medkits, respect_points);
         }
-
         file.close();
 
         // Wyświetlanie listy postaci
@@ -127,29 +169,26 @@ Firefighter loadGame() {
             cout << i + 1 << ". " << firefighters[i].name << " (Zdrowie: " << firefighters[i].health << ", Doswiadczenie: " << firefighters[i].experience << ")\n";
         }
 
-        bool choice_accepted = false;
-        while (!choice_accepted) {
+        while (true) {
             // Wybór postaci przez użytkownika
             int choice;
-            cout << "Wybierz postac (1-" << firefighters.size() << "): ";
+            cout << "Wybierz zapis (1-" << firefighters.size() << "): ";
             choice = getChoice();
 
             // Zwracanie wybranej postaci
             if (choice > 0 && choice <= firefighters.size()) {
+                cout << "[WCZYTANO ZAPIS]" << endl;
                 return firefighters[choice - 1];
-                choice_accepted = true;
             } else {
                 cout << "Nieprawidlowy wybor. Sprobuj ponownie." << endl;
             }
         }
     } else {
-        cerr << "[WYSTAPIL BLAD PODCZAS WCZYTYWANIA] " << filename << endl;
-        return Firefighter(); // Zwracanie domyślnej postaci w razie błędu
+        cout << "[WYSTAPIL BLAD PODCZAS WCZYTYWANIA]" << endl;
+        cout << "[STWORZONO NOWA POSTAC]" << endl;
+        return {}; // Zwracanie domyślnej postaci w razie błędu
     }
 }
-
-
-
 
 
 void sleep(int time_ms){
@@ -168,7 +207,7 @@ string toUpperCase(const string& input) {
 
 
 string encryptCaesar(const string& text, int shift) {
-    string result = "";
+    string result;
 
     for (char c : text) {
         if (isalpha(c)) {
@@ -313,36 +352,6 @@ void print_letter_by_letter(string string){
     cout << endl;
 }
 
-void showEquiment(Firefighter &player){
-    cout << endl << "[" << player.name << "]" << endl;
-    cout << "Doswiadczenie: " << player.experience << endl;
-    cout << "Punkty Respektu: " << player.respect_points << endl;
-    cout << "Stan zdrowia: "<< player.health << "/" << player.max_health << endl;
-    switch (player.extinguisher_lvl) {
-        case 1:
-            cout << "Gasnica: ZWYKLA GASNICA" << endl;
-            break;
-        case 2:
-            cout << "Gasnica: NIEPOSPOLITA GASNICA" << endl;
-            break;
-        case 3:
-            cout << "Gasnica: GASNICA DOWODCY" << endl;
-            break;
-        case 4:
-            cout << "Gasnica: LEGENDARNA GASNICA" << endl;
-            break;
-        case 5:
-            cout << "Gasnica: GASNICA ZE SMOCZEJ LUSKI" << endl;
-            break;
-        default:
-            cout << "Gasnica: BRAK" << endl;
-            break;
-    }
-    if (player.waterBomb_lvl > 0) {
-        cout << "Bomby wodne (szt): " << player.waterBomb_amt << endl;
-    }
-    cout << "Apteczki (szt): " << player.medkits << endl;
-}
 
 void RCMission1(Firefighter &player){
     random_device rd;
@@ -526,7 +535,7 @@ void SCMission1(Firefighter &player){
     bool sequence_correct = false;
     while (!sequence_correct) {
         cout << endl;
-        string user_sequence = "";
+        string user_sequence;
         for (int i = 1; i <= 7; i++) {
             string user_input;
             cout << "Zawor " << i << " (O/Z): ";
@@ -577,11 +586,7 @@ void SCMission1(Firefighter &player){
 void SCMission2(Firefighter &player){
 
 
-
-
 }
-
-
 
 
 void SaveCityMission(Firefighter &player){
@@ -616,11 +621,8 @@ int main() {
     Dragon Pyros("PYROS",500,70);
     Dragon Zguba_Miast("ZGUBA MIAST",700,90);
     Dragon Wladca_Zaru("WLADCA ZARU", 1000, 120);
-    //Firefighter player("Test",1010,1,2,3,4,5,6,7);
-    //player.saveGame();
 
-    Firefighter player = loadGame();
-    showEquiment(player);
+    Firefighter player;
 
     bool showMenu = true;
     cout << "Straznicy Zaru: Ognisty Konflikt" << endl;
@@ -634,7 +636,8 @@ int main() {
                 showMenu = false;
                 break;
             case 2:
-                cout << "Coming soon..." << endl;
+                player = loadGame();
+                showMenu = false;
                 break;
             case 0:
                 cout << "Do zobaczenia!" << endl;
@@ -645,9 +648,8 @@ int main() {
         }
 
     }
-    player.saveGame();
     // PROLOGUE
-    // player.experience ++; // skipping prologue
+    //player.experience ++; // skipping prologue
         if (player.experience == 0){
             player.waterBomb_lvl ++;
             player.waterBomb_amt += 3;
@@ -767,10 +769,10 @@ int main() {
                 HuntForDragonMission(player);
                 break;
             case 4:
-                showEquiment(player);
+                player.showEquiment();
                 break;
             case 5:
-                cout << "Coming soon..." << endl;
+                player.saveGame();
                 break;
             case 0:
                 gameOver = true;
