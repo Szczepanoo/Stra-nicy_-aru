@@ -5,6 +5,8 @@
 #include <random>
 #include <array>
 #include <fstream>
+#include <sstream>
+#include <vector>
 
 using namespace std;
 
@@ -82,10 +84,7 @@ public:
 
 };
 
-void sleep(int time_ms){
-    this_thread::sleep_for(chrono::milliseconds(time_ms));
-}
-
+// Funkcja pobierajaca liczbe od uzytkownika
 int getChoice(){
     string choiceStr;
     int choice;
@@ -96,6 +95,65 @@ int getChoice(){
         choice = -999;
     }
     return choice;
+}
+
+// Funkcja wczytująca grę
+Firefighter loadGame() {
+    string filename = "game_saves.csv";
+    ifstream file(filename);
+    vector<Firefighter> firefighters;
+    string line;
+
+    if (file.is_open()) {
+
+        // Wczytywanie postaci
+        while (getline(file, line)) {
+            stringstream ss(line);
+            string name;
+            int health, max_health, experience, extinguisher_lvl, waterBomb_lvl, waterBomb_amt, medkits, respect_points;
+            char comma;
+
+            getline(ss, name, ',');
+            ss >> health >> comma >> max_health >> comma >> experience >> comma >> extinguisher_lvl >> comma
+               >> waterBomb_lvl >> comma >> waterBomb_amt >> comma >> medkits >> comma >> respect_points;
+
+            firefighters.emplace_back(name, health, max_health, experience, extinguisher_lvl, waterBomb_lvl, waterBomb_amt, medkits, respect_points);
+        }
+
+        file.close();
+
+        // Wyświetlanie listy postaci
+        for (size_t i = 0; i < firefighters.size(); ++i) {
+            cout << i + 1 << ". " << firefighters[i].name << " (Zdrowie: " << firefighters[i].health << ", Doswiadczenie: " << firefighters[i].experience << ")\n";
+        }
+
+        bool choice_accepted = false;
+        while (!choice_accepted) {
+            // Wybór postaci przez użytkownika
+            int choice;
+            cout << "Wybierz postac (1-" << firefighters.size() << "): ";
+            choice = getChoice();
+
+            // Zwracanie wybranej postaci
+            if (choice > 0 && choice <= firefighters.size()) {
+                return firefighters[choice - 1];
+                choice_accepted = true;
+            } else {
+                cout << "Nieprawidlowy wybor. Sprobuj ponownie." << endl;
+            }
+        }
+    } else {
+        cerr << "[WYSTAPIL BLAD PODCZAS WCZYTYWANIA] " << filename << endl;
+        return Firefighter(); // Zwracanie domyślnej postaci w razie błędu
+    }
+}
+
+
+
+
+
+void sleep(int time_ms){
+    this_thread::sleep_for(chrono::milliseconds(time_ms));
 }
 
 string toUpperCase(const string& input) {
@@ -558,8 +616,12 @@ int main() {
     Dragon Pyros("PYROS",500,70);
     Dragon Zguba_Miast("ZGUBA MIAST",700,90);
     Dragon Wladca_Zaru("WLADCA ZARU", 1000, 120);
-    Firefighter player("Test",1010,1,2,3,4,5,6,7);
-    player.saveGame();
+    //Firefighter player("Test",1010,1,2,3,4,5,6,7);
+    //player.saveGame();
+
+    Firefighter player = loadGame();
+    showEquiment(player);
+
     bool showMenu = true;
     cout << "Straznicy Zaru: Ognisty Konflikt" << endl;
     while (showMenu) {
