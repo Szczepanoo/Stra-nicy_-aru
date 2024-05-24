@@ -217,7 +217,7 @@ void sleep(int time_ms){
     this_thread::sleep_for(chrono::milliseconds(time_ms));
 }
 
-
+// Funkcja wyswietlajaca wypowiadane kwestie
 void print_letter_by_letter(string string){
     for (int i = 0; i < string.length(); i ++){
         cout << string[i] << flush;
@@ -348,7 +348,7 @@ int fight(Firefighter &player, Dragon &dragon) {
         // Uzycie apteczki lub atak na smoka
         if (usemedkit){
             player.health = player.max_health;
-            cout << "Uzywasz apteczki." << endl;
+            cout << "[-] UZYTO APTECZKI" << endl;
             player.medkits--;
             cout << "Pozostalo " << player.medkits << "szt." << endl;
         } else {
@@ -366,7 +366,7 @@ int fight(Firefighter &player, Dragon &dragon) {
             player.experience += 10;
             cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
             cin.get();
-            return -1;
+            return 1;
 
         }
 
@@ -386,6 +386,14 @@ int fight(Firefighter &player, Dragon &dragon) {
             player.experience += max_dragon_health;
             cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
             cin.get();
+            if (dragon.name != "NIKCZEMNIUCH"){
+                cout << "Dowodca Strazakow Samuel: ";
+                print_letter_by_letter("Swietnie sie spisales swiezaku. Wez to i polataj sie troche.");
+                cout << "[+] DODANO APTECZKI: 5";
+                player.medkits += 5;
+            }
+
+
             return 1;
         }
     }
@@ -596,8 +604,24 @@ void SCMission1(Firefighter &player){
 
     cout << endl << "[MISJA ZAKONCZONA SUKCESEM]" << endl;
     cout << "Zdobywasz: 210xp." << endl;
+
+    if (player.waterBomb_lvl > 0){
+        random_device rd;
+        mt19937 gen(rd());
+
+        uniform_int_distribution<> dis(0, 1);
+        uniform_int_distribution<> dis2(1,3);
+        int isBombFound = dis(gen);
+        if (isBombFound == 1){
+            int foundBombsAmt = dis2(gen);
+            cout << "[+] ZNALEZIONO BOMBY WODNE: " << foundBombsAmt << endl;
+        }
+    }
+    player.max_health += 25;
+    cout << "[ZWIEKSZONO MAKSYMALNE ZDROWIE DO "<< player.max_health << "]" << endl;
     cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
     player.experience += 210;
+
     if (player.waterBomb_lvl == 0){
         sleep(3000);
         cout << "Starszy Strazak Franciszek: ";
@@ -678,6 +702,20 @@ void SCMission2(Firefighter &player){
     sleep(1000);
     cout << endl << "[MISJA ZAKONCZONA SUKCESEM]" << endl;
     cout << "Zdobywasz: 190xp." << endl;
+    if (player.waterBomb_lvl > 0){
+        random_device rd;
+        mt19937 gen(rd());
+
+        uniform_int_distribution<> dis(0, 1);
+        uniform_int_distribution<> dis2(1,3);
+        int isBombFound = dis(gen);
+        if (isBombFound == 1){
+            int foundBombsAmt = dis2(gen);
+            cout << "[+] ZNALEZIONO BOMBY WODNE: " << foundBombsAmt << endl;
+        }
+    }
+    player.max_health += 20;
+    cout << "[ZWIEKSZONO MAKSYMALNE ZDROWIE DO "<< player.max_health << "]" << endl;
     cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
     player.experience += 190;
 
@@ -902,7 +940,7 @@ int main() {
     // MAIN GAME LOOP
     bool gameOver = false;
     while (!gameOver) {
-        cout << "[CENTRUM DOWODZENIA]";
+        cout << endl << "[CENTRUM DOWODZENIA]";
         cout << "\n[Wybierz akcje]\n1. Misja ratunkowa\n2. Gaszenie pozaru\n3. Polowanie na smoki\n4. Wyswietl ekwipunek\n"
                 "5. Zapisz gre\n9. Uzyj apteczki\n0. Wyjscie z gry\n";
 
