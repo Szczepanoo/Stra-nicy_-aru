@@ -1,11 +1,10 @@
 #include <iostream>
 #include <string>
-#include <cstdlib>
-#include <ctime>
 #include <thread>
 #include <chrono>
 #include <random>
 #include <array>
+#include <fstream>
 
 using namespace std;
 
@@ -43,8 +42,43 @@ public:
     int medkits;
     int respect_points;
 
-
+    // Constructor with default parameters
     Firefighter() : name(""), health(120), max_health(120), experience(0), extinguisher_lvl(0), waterBomb_lvl(0), waterBomb_amt(0), medkits(0), respect_points(0){}
+
+    Firefighter(string name, int health, int max_health, int experience, int extinguisher_lvl, int waterBomb_lvl, int waterBomb_amt, int medkits, int respect_points):
+            name(name),
+            health(health),
+            max_health(max_health),
+            experience(experience),
+            extinguisher_lvl(extinguisher_lvl),
+            waterBomb_lvl(waterBomb_lvl),
+            waterBomb_amt(waterBomb_amt),
+            medkits(medkits),
+            respect_points(respect_points) {}
+
+    void saveGame() {
+        const string filename = "game_saves.csv";
+
+        // Otwarcie pliku w trybie dopisywania
+        ofstream file(filename, ios::app);
+
+        if (file.is_open()) {
+            file << name << ","
+                 << health << ","
+                 << max_health << ","
+                 << experience << ","
+                 << extinguisher_lvl << ","
+                 << waterBomb_lvl << ","
+                 << waterBomb_amt << ","
+                 << medkits << ","
+                 << respect_points << "\n";
+            file.close();
+            cout << "[ZAPISANO GRE]" << endl;
+        } else {
+            cerr << "[WYSTAPIL BLAD PODCZAS ZAPISU]" << filename << endl;
+        }
+    }
+
 
 };
 
@@ -524,8 +558,8 @@ int main() {
     Dragon Pyros("PYROS",500,70);
     Dragon Zguba_Miast("ZGUBA MIAST",700,90);
     Dragon Wladca_Zaru("WLADCA ZARU", 1000, 120);
-    Firefighter player;
-
+    Firefighter player("Test",1010,1,2,3,4,5,6,7);
+    player.saveGame();
     bool showMenu = true;
     cout << "Straznicy Zaru: Ognisty Konflikt" << endl;
     while (showMenu) {
@@ -549,6 +583,7 @@ int main() {
         }
 
     }
+    player.saveGame();
     // PROLOGUE
     // player.experience ++; // skipping prologue
         if (player.experience == 0){
