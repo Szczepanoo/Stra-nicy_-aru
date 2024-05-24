@@ -44,11 +44,17 @@ public:
     int waterBomb_amt;
     int medkits;
     int respect_points;
+    int burzogniew_hp;
+    int pyros_hp;
+    int zguba_miast_hp;
+    int wladca_zaru_hp;
 
     // Constructor with default parameters
-    Firefighter() : name(""), health(120), max_health(120), experience(0), extinguisher_lvl(0), waterBomb_lvl(0), waterBomb_amt(0), medkits(0), respect_points(0){}
+    Firefighter() : name(""), health(120), max_health(120), experience(0), extinguisher_lvl(0), waterBomb_lvl(0),
+    waterBomb_amt(0), medkits(0), respect_points(0), burzogniew_hp(100), pyros_hp(500), zguba_miast_hp(700), wladca_zaru_hp(1000){}
 
-    Firefighter(string name, int health, int max_health, int experience, int extinguisher_lvl, int waterBomb_lvl, int waterBomb_amt, int medkits, int respect_points):
+    Firefighter(string name, int health, int max_health, int experience,int extinguisher_lvl, int waterBomb_lvl,
+                int waterBomb_amt, int medkits, int respect_points, int burzogniew_hp, int pyros_hp, int zguba_miast_hp, int wladca_zaru_hp):
             name(std::move(name)),
             health(health),
             max_health(max_health),
@@ -57,13 +63,22 @@ public:
             waterBomb_lvl(waterBomb_lvl),
             waterBomb_amt(waterBomb_amt),
             medkits(medkits),
-            respect_points(respect_points) {}
+            respect_points(respect_points),
+            burzogniew_hp(burzogniew_hp),
+            pyros_hp(pyros_hp),
+            zguba_miast_hp(zguba_miast_hp),
+            wladca_zaru_hp(wladca_zaru_hp) {}
 
-    void saveGame() const {
+    void saveGame(Dragon &burzogniew, Dragon &pyros, Dragon &zguba_miast, Dragon &wladca_zaru) {
         const string filename = "game_saves.csv";
 
         // Otwarcie pliku w trybie dopisywania
         ofstream file(filename, ios::app);
+
+        burzogniew_hp = burzogniew.health;
+        pyros_hp = pyros.health;
+        zguba_miast_hp = zguba_miast.health;
+        wladca_zaru_hp = wladca_zaru.health;
 
         if (file.is_open()) {
             file << name << ","
@@ -74,7 +89,11 @@ public:
                  << waterBomb_lvl << ","
                  << waterBomb_amt << ","
                  << medkits << ","
-                 << respect_points << "\n";
+                 << respect_points << ","
+                 << burzogniew_hp << ","
+                 << pyros_hp << ","
+                 << zguba_miast_hp << ","
+                 << wladca_zaru_hp << "\n";
             file.close();
             cout << "[ZAPISANO GRE]" << endl;
         } else {
@@ -92,7 +111,7 @@ public:
                 cout << "Gasnica: ZWYKLA GASNICA" << endl;
                 break;
             case 2:
-                cout << "Gasnica: NIEPOSPOLITA GASNICA" << endl;
+                cout << "Gasnica: ULEPSZONA GASNICA" << endl;
                 break;
             case 3:
                 cout << "Gasnica: GASNICA DOWODCY" << endl;
@@ -153,14 +172,17 @@ Firefighter loadGame() {
         while (getline(file, line)) {
             stringstream ss(line);
             string name;
-            int health, max_health, experience, extinguisher_lvl, waterBomb_lvl, waterBomb_amt, medkits, respect_points;
+            int health, max_health, experience, extinguisher_lvl, waterBomb_lvl, waterBomb_amt, medkits,
+                respect_points, burzogniew_hp, pyros_hp, zguba_miast_hp, wladca_zaru_hp;
             char comma;
 
             getline(ss, name, ',');
             ss >> health >> comma >> max_health >> comma >> experience >> comma >> extinguisher_lvl >> comma
-               >> waterBomb_lvl >> comma >> waterBomb_amt >> comma >> medkits >> comma >> respect_points;
+               >> waterBomb_lvl >> comma >> waterBomb_amt >> comma >> medkits >> comma >> respect_points >> comma
+               >> burzogniew_hp >> comma >> pyros_hp >> comma >> zguba_miast_hp >> comma >> wladca_zaru_hp;
 
-            firefighters.emplace_back(name, health, max_health, experience, extinguisher_lvl, waterBomb_lvl, waterBomb_amt, medkits, respect_points);
+            firefighters.emplace_back(name, health, max_health, experience, extinguisher_lvl, waterBomb_lvl,
+                                      waterBomb_amt, medkits, respect_points, burzogniew_hp, pyros_hp, zguba_miast_hp, wladca_zaru_hp);
         }
         file.close();
 
@@ -668,12 +690,26 @@ void SaveCityMission(Firefighter &player){
 }
 
 
-void HuntForDragonMission(Firefighter &player){
+void HuntForDragonMission(Firefighter &player, Dragon &burzogniew, Dragon &pyros, Dragon &zgubaMiast, Dragon &wladca_Zaru){
+    if (burzogniew.health >= 0){
+        fight(player, burzogniew);
+    }
 
+    if (pyros.health >= 0){
+        fight(player, pyros);
+    }
+
+    if (zgubaMiast.health >= 0){
+        fight(player, zgubaMiast);
+    }
+
+    if (wladca_Zaru.health >= 0){
+        fight(player, wladca_Zaru);
+    }
 }
 
 int main() {
-    Dragon Nikczemniuch("NIKCZEMNIUCH",600,20);
+    Dragon Nikczemniuch("NIKCZEMNIUCH",60,20);
     Dragon Burzogniew("BURZOGNIEW",100,50);
     Dragon Pyros("PYROS",500,70);
     Dragon Zguba_Miast("ZGUBA MIAST",700,90);
@@ -694,6 +730,10 @@ int main() {
                 break;
             case 2:
                 player = loadGame();
+                Burzogniew.health = player.burzogniew_hp;
+                Pyros.health = player.burzogniew_hp;
+                Zguba_Miast.health = player.zguba_miast_hp;
+                Wladca_Zaru.health = player.wladca_zaru_hp;
                 showMenu = false;
                 break;
             case 0:
@@ -824,13 +864,13 @@ int main() {
                 SaveCityMission(player);
                 break;
             case 3:
-                HuntForDragonMission(player);
+                HuntForDragonMission(player, Burzogniew, Pyros, Zguba_Miast, Wladca_Zaru);
                 break;
             case 4:
                 player.showEquiment();
                 break;
             case 5:
-                player.saveGame();
+                player.saveGame(Burzogniew, Pyros, Zguba_Miast, Wladca_Zaru);
                 break;
             case 0:
                 gameOver = true;
