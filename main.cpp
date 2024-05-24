@@ -195,6 +195,7 @@ void sleep(int time_ms){
     this_thread::sleep_for(chrono::milliseconds(time_ms));
 }
 
+// Funkcja zamieniająca wszystkie litery w slowie na duze
 string toUpperCase(const string& input) {
     string result = input;
 
@@ -205,7 +206,7 @@ string toUpperCase(const string& input) {
     return result;
 }
 
-
+// Funkcja szyfrująca szyfrem Cezara
 string encryptCaesar(const string& text, int shift) {
     string result;
 
@@ -417,6 +418,7 @@ void RCMission1(Firefighter &player){
 
 }
 
+
 void RCMission2(Firefighter &player){
     random_device rd;
     mt19937 gen(rd());
@@ -490,6 +492,7 @@ void RCMission2(Firefighter &player){
 
 
 }
+
 
 void RescueCivilianMission(Firefighter &player){
     random_device rd;
@@ -582,9 +585,63 @@ void SCMission1(Firefighter &player){
 }
 
 
-
 void SCMission2(Firefighter &player){
+    cout << "Starszy Strazak Franciszek: ";
+    print_letter_by_letter("Mlody! Ruszamy na pomoc chlopakom ktorzy walcza z pozarem w dzielnicy biurowej! "
+                           "Pojechali juz kilka godzin temu, a wciaz otrzymujemy stamtad sygnal alarmowy!");
+    sleep(2000);
+    cout << "[PYROKLAS - DZIELNICA BIUROWA]" << endl;
+    cout << "Starszy Strazak Franciszek: ";
+    print_letter_by_letter("Czesc Dominik, dostalismy sygnal alarmowy z tego budynku, ale widze, ze sytuacja opanowana?");
+    sleep(1000);
+    cout << "Strazak Dominik: ";
+    print_letter_by_letter("Witajcie, wlasnie udalo nam sie opanowac ogien, tylko ten ALARM WCIAZ WYJE. Moze to blokowac "
+                           "odbieranie sygnalow z innych czesci miasta. Wiecie moze co z tym zrobic?");
+    cout << "Starszy Strazak Franciszek: ";
+    print_letter_by_letter("Zajmiemy sie tym! Pamietam, ze panel kontrolny jest w piwnicy tamtego biurowca. Za mna mlody!");
+    sleep(2000);
+    cout << "[BIUROWIEC J.D. ENTERTAINMENT - PIWNICA]" << endl;
+    cout << "Starszy Strazak Franciszek: ";
+    print_letter_by_letter("O! Tutaj jest ten panel. Poprawne wylaczenie alarmu wymagana odlaczenia poszczegolnych modulow "
+                           "w odpowiedniej kolejnosci. Najpierw trzeba odlaczyc czujniki dymu, nastepnie czujniki ciepla. "
+                           "Wtedy mozemy odlaczyc syrene alarmowa od panelu kontrolnego i na koncu panel kontrolny od zasilania. "
+                           "Tu na klapie jest dokladna instrukcja opisujaca ktory przewod laczy sie z ktorym modulem. "
+                           "Niestety ma juz swoje lata i niektore litery sa nieczytelne. Ja nie potrafie tego odczytac. "
+                           "Jestes w stanie podac mi kolory przewodow w kolejnosci jakiej nalezy odlaczac moduly? ");
 
+    string note =
+    "Czer  ny  rzewod: Lac y syr ne alar owa z pa  lem kont  lnym\n"
+    "Nie  e ki pr ewod: aczy czu niki d mu z panel m kontrol  m\n"
+    "Zie ony prze od: Lacz pan l kont olny z zasi  niem\n"
+    "Bi ly przew d: La  y czu  iki ci pla z pane em k  trolnym\n";
+    cout << endl << note << endl;
+
+    string sequence = "NBCZ";
+    bool sequence_correct = false;
+    while (!sequence_correct) {
+        cout << endl;
+        string user_sequence;
+        for (int i = 1; i <= 4; i++) {
+            string user_input;
+            cout << "Przewod " << i << " (N/B/C/Z): ";
+            cin >> user_input;
+            user_sequence += user_input;
+        }
+        cout << endl;
+        string upper_user_sequence = toUpperCase(user_sequence);
+        if (sequence == upper_user_sequence){
+            cout << "Starszy Strazak Franciszek: ";
+            cout << "Udalo sie! Nareszcie cisza i spokoj!" << endl;
+            sequence_correct = true;
+        } else {
+            cout << "Starszy Strazak Franciszek: ";
+            cout << "Alarm sie nie wylaczyl! Sprobujmy jeszcze raz! Wystarczy ze podasz mi pierwsza litere danego koloru." << endl;
+        }
+    }
+    cout << endl << "[MISJA ZAKONCZONA SUKCESEM]" << endl;
+    cout << "Zdobywasz: 190xp." << endl;
+    cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
+    player.experience += 190;
 
 }
 
@@ -648,9 +705,9 @@ int main() {
         }
 
     }
+    player.experience ++; // skipping prologue
     // PROLOGUE
-    //player.experience ++; // skipping prologue
-        if (player.experience == 0){
+    if (player.experience == 0){
             player.waterBomb_lvl ++;
             player.waterBomb_amt += 3;
             system("cls");
@@ -751,9 +808,10 @@ int main() {
 
 
         }
-        // MAIN GAME LOOP
+    // MAIN GAME LOOP
     bool gameOver = false;
     while (!gameOver) {
+        SCMission2(player);
         cout << "\n[Wybierz akcje]\n1. Misja ratunkowa\n2. Gaszenie pozaru\n3. Polowanie na smoki\n4. Wyswietl ekwipunek\n5. Zapisz gre\n0. Wyjscie z gry\n";
 
         int choice = getChoice();
@@ -783,6 +841,6 @@ int main() {
         }
     }
 
-    cout << "Dziekujemy za gre!" << endl;
+    cout << "Do zobaczenia!" << endl;
     return 0;
 }
