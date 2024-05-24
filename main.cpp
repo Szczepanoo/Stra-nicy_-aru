@@ -217,6 +217,16 @@ void sleep(int time_ms){
     this_thread::sleep_for(chrono::milliseconds(time_ms));
 }
 
+
+void print_letter_by_letter(string string){
+    for (int i = 0; i < string.length(); i ++){
+        cout << string[i] << flush;
+        sleep(50);
+    }
+    cout << endl;
+}
+
+
 // Funkcja zamieniająca wszystkie litery w slowie na duze
 string toUpperCase(const string& input) {
     string result = input;
@@ -249,8 +259,20 @@ string decryptCaesar(const string& text, int shift) {
     return encryptCaesar(text, 26 - (shift % 26));
 }
 
+
 int fight(Firefighter &player, Dragon &dragon) {
     int max_dragon_health = dragon.health;
+
+    if (dragon.name == "BURZOGNIEW"){
+        cout << "Dowodca Strazakow Samuel: ";
+        print_letter_by_letter("UWAGA WSZYSCY PELNA MOBILIZACJA! Namierzylismy BURZOGNIEWA! Terroryzuje ludzi w parku!"
+                               "Ruszajmy tam zanim sie zmyje!");
+        sleep(2000);
+        cout << "[PYROKLAS - PARK MIEJSKI]" << endl;
+        cout << "Dowodca Strazakow Samuel: ";
+        print_letter_by_letter("Oho! Jest tutaj! Do ataku!");
+    }
+
     dragon.print_info();
     while (player.health >= 0 && dragon.health > 0) {
         int base_player_damage;
@@ -339,7 +361,8 @@ int fight(Firefighter &player, Dragon &dragon) {
         if (player.health - real_dragon_damage <= 0 && dragon.name == "NIKCZEMNIUCH"){
             cout << "Starszy Strazak Franciszek zadaje 35 obrazen smokowi!" << endl;
             cout << "Poziom zdrowia przeciwnika: " << dragon.health - 35 << "/" << max_dragon_health  << endl;
-            cout << "Zwyciestwo! Zdobywasz: 10xp" << endl;
+            cout << "Zwyciestwo!" << endl;
+            cout << "Zdobywasz: 10xp" << endl;
             player.experience += 10;
             cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
             cin.get();
@@ -358,21 +381,14 @@ int fight(Firefighter &player, Dragon &dragon) {
             cin.get();
             return -1;
         } else if (dragon.health <= 0) {
-            cout << "Zwyciestwo! Zdobywasz: "<< max_dragon_health << "xp." << endl;
+            cout << "Zwyciestwo!" << endl;
+            cout << "Zdobywasz: "<< max_dragon_health << "xp." << endl;
             player.experience += max_dragon_health;
             cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
             cin.get();
             return 1;
         }
     }
-}
-
-void print_letter_by_letter(string string){
-    for (int i = 0; i < string.length(); i ++){
-        cout << string[i] << flush;
-         sleep(50);
-    }
-    cout << endl;
 }
 
 
@@ -511,7 +527,6 @@ void RCMission2(Firefighter &player){
     cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
     player.experience += 100;
     player.respect_points += 150;
-
 
 }
 
@@ -653,17 +668,34 @@ void SCMission2(Firefighter &player){
         string upper_user_sequence = toUpperCase(user_sequence);
         if (sequence == upper_user_sequence){
             cout << "Starszy Strazak Franciszek: ";
-            cout << "Udalo sie! Nareszcie cisza i spokoj!" << endl;
+            print_letter_by_letter("Udalo sie! Nareszcie cisza i spokoj!");
             sequence_correct = true;
         } else {
             cout << "Starszy Strazak Franciszek: ";
             cout << "Alarm sie nie wylaczyl! Sprobujmy jeszcze raz! Wystarczy ze podasz mi pierwsza litere danego koloru." << endl;
         }
     }
+    sleep(1000);
     cout << endl << "[MISJA ZAKONCZONA SUKCESEM]" << endl;
     cout << "Zdobywasz: 190xp." << endl;
     cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
     player.experience += 190;
+
+    if (player.extinguisher_lvl == 1){
+        sleep(2000);
+        cout << "Starszy Strazak Franciszek: ";
+        print_letter_by_letter("Widzisz te zakurzona gablota przeciwpozarowa? Jesli dobrze widze jest tam gasnica.");
+        sleep(2000);
+        cout << "Starszy Strazak Franciszek: ";
+        print_letter_by_letter("Zamknieta. Budynek jest w takim stanie, ze lada chwila moze sie zawalic.");
+        sleep(2000);
+        cout << "[BRZDEKKK!]";
+        cout << "Starszy Strazak Franciszek: ";
+        print_letter_by_letter("Zabierzmy ja stad. Szkoda by bylo gdyby zostala tu pod gruzami. W zasadzie to mozesz ja wziac. "
+                               "Jest to lepszy model niz ten ktory dostales ode mnie w trakcie szkolenia. ");
+        cout << "[+] DODANO PRZEDMIOT: ULEPSZONA GASNICA";
+        player.extinguisher_lvl++;
+    }
 
 }
 
@@ -692,18 +724,37 @@ void SaveCityMission(Firefighter &player){
 
 void HuntForDragonMission(Firefighter &player, Dragon &burzogniew, Dragon &pyros, Dragon &zgubaMiast, Dragon &wladca_Zaru){
     if (burzogniew.health >= 0){
-        fight(player, burzogniew);
-    }
+        if (player.waterBomb_lvl == 0){
+            cout << "Starszy Strazak Franciszek: ";
+            print_letter_by_letter("Wedlug mnie to teraz zly pomysl. Lepiej bedzie wybrac sie na misje gaszenia pozaru. "
+                                   "Byc moze uda nam sie znalezc dla Ciebie lepszy sprzet. Jesli jednak chesz wyruszyc na polowanie "
+                                   "- nie zatrzymuje Cie.");
+            cout << "Wybierz akcje:" << endl;
+            cout << "1. Wyrusz na polowanie." << endl;
+            cout << "2. Powrot." << endl;
+            int choice = getChoice();
+            if (choice != 1){
+                return;
+            } else {
+                cout << "Starszy Strazak Franciszek: ";
+                print_letter_by_letter("Pamietaj, ze Cie ostrzegalem.");
+                fight(player, burzogniew);
+            }
 
-    if (pyros.health >= 0){
+        } else {
+            fight(player, burzogniew);
+        }
+
+    } else if (pyros.health >= 0){
+
         fight(player, pyros);
-    }
 
-    if (zgubaMiast.health >= 0){
+    } else if (zgubaMiast.health >= 0){
+
         fight(player, zgubaMiast);
-    }
 
-    if (wladca_Zaru.health >= 0){
+    } else if (wladca_Zaru.health >= 0){
+
         fight(player, wladca_Zaru);
     }
 }
@@ -731,7 +782,7 @@ int main() {
             case 2:
                 player = loadGame();
                 Burzogniew.health = player.burzogniew_hp;
-                Pyros.health = player.burzogniew_hp;
+                Pyros.health = player.pyros_hp;
                 Zguba_Miast.health = player.zguba_miast_hp;
                 Wladca_Zaru.health = player.wladca_zaru_hp;
                 showMenu = false;
@@ -758,7 +809,7 @@ int main() {
                                    "Ostatnio jednak atmosfera napiecia narasta, a grozba zlowrogich pozarow staje sie coraz bardziej realna. "
                                    "Jako mlody adept pozarnictwa wstepujesz w szeregi lokalnej jednostki strazy pozarnej, aby wesprzec ich w dzialaniach.");
             sleep(2000);
-            cout << "[---GLOWNA SIEDZIBA STRAZNIKOW ZARU---]" << endl;
+            cout << "[GLOWNA SIEDZIBA STRAZNIKOW ZARU]" << endl;
             cout << "Dowodca Strazakow Samuel: ";
             print_letter_by_letter("Witaj swiezaku, jestem Sam i dowodze tymi oszolomami.");
             sleep(3000);
@@ -785,7 +836,7 @@ int main() {
             cout << "Starszy Strazak Franciszek: ";
             print_letter_by_letter("Za mna mlody, wydaje mi sie, ze wyladowal na dachu. Pamietaj o gasnicy! ");
             sleep(3000);
-            cout << "[---GLOWNA SIEDZIBA STRAZNIKOW ZARU - DACH---]" << endl;
+            cout << "[GLOWNA SIEDZIBA STRAZNIKOW ZARU - DACH]" << endl;
             cout << "Starszy Strazak Franciszek: ";
             print_letter_by_letter("Acha! Jest tutaj! Do dziela mlody!");
             fight(player,Nikczemniuch);
@@ -851,8 +902,9 @@ int main() {
     // MAIN GAME LOOP
     bool gameOver = false;
     while (!gameOver) {
-        SCMission2(player);
-        cout << "\n[Wybierz akcje]\n1. Misja ratunkowa\n2. Gaszenie pozaru\n3. Polowanie na smoki\n4. Wyswietl ekwipunek\n5. Zapisz gre\n0. Wyjscie z gry\n";
+        cout << "[CENTRUM DOWODZENIA]";
+        cout << "\n[Wybierz akcje]\n1. Misja ratunkowa\n2. Gaszenie pozaru\n3. Polowanie na smoki\n4. Wyswietl ekwipunek\n"
+                "5. Zapisz gre\n9. Uzyj apteczki\n0. Wyjscie z gry\n";
 
         int choice = getChoice();
 
@@ -871,6 +923,11 @@ int main() {
                 break;
             case 5:
                 player.saveGame(Burzogniew, Pyros, Zguba_Miast, Wladca_Zaru);
+                break;
+            case 9:
+                player.health = player.max_health;
+                cout << "[PRZYWROCONO ZDROWIE]" << endl;
+                cout << "Poziom zdrowia: " << player.health << "/" << player.max_health << endl;
                 break;
             case 0:
                 gameOver = true;
