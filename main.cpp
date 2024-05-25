@@ -23,12 +23,16 @@ public:
 
     void print_info() const {
         cout << "[" << name << "]" << endl;
-        if (name == "NIKCZEMNIUCH") {
+        if (name == "NIKCZEMNIUCH" || name == "WLADCA ZARU") {
             cout << "Sila: brak danych" << endl;
         } else {
             cout << "Sila: " << damage << endl;
         }
-        cout << "Zdrowie: " << health << endl << endl;
+        if (name == "WLADCA ZARU"){
+            cout << "Zdrowie: brak danych" << endl;
+        } else {
+            cout << "Zdrowie: " << health << endl << endl;
+        }
     }
 };
 
@@ -286,6 +290,18 @@ int fight(Firefighter &player, Dragon &dragon) {
         print_letter_by_letter("UDERZMY W NIEGO RAZEM! DO ATAKU MLODY! ZA SAMUELAAA!");
     }
 
+    if (dragon.name == "ZGUBA MIAST"){
+        cout << "Starszy Strazak Franciszek: ";
+        print_letter_by_letter("UWAGA! NAMIERZYLISMY ZGUBE MIAST! Sluchaj mlody - to NAJPOTEZNIEJSZY znany nam smok! "
+                               "Bomby wodne od Ryczerzy Ognia swietnie sie sprawdza przeciwko niemu!"
+                               "Wyladowal na rynku i atakuje mieszkancow! Ruchy mlody! DO SAMOCHODU! ");
+        sleep(2000);
+        cout << "[RYNEK W PYROKLESIE]";
+        cout << "Starszy Strazak Franciszek: ";
+        print_letter_by_letter("Mamy go! Teraz mlody! DAJMY MU POPALIC!");
+
+    }
+
     dragon.print_info();
     while (player.health >= 0 && dragon.health > 0) {
         int base_player_damage;
@@ -402,7 +418,11 @@ int fight(Firefighter &player, Dragon &dragon) {
         player.health -= real_dragon_damage;
         cout << dragon.name << " atakuje zadajac " << real_dragon_damage << " obrazen!" << endl << endl;
         cout << "Poziom twojego zdrowia: " << player.health << "/" << player.max_health << endl;
-        cout << "Poziom zdrowia przeciwnika: " << dragon.health << "/" << max_dragon_health << endl;
+        if (dragon.name == "WLADCA ZARU"){
+            cout << "Poziom zdrowia przeciwnika: ???/???" << endl;
+        } else{
+            cout << "Poziom zdrowia przeciwnika: " << dragon.health << "/" << max_dragon_health << endl;
+        }
         if (player.health <= 0) {
             cout << "Porazka" << endl;
             player.experience += 1;
@@ -451,6 +471,20 @@ int fight(Firefighter &player, Dragon &dragon) {
                 print_letter_by_letter("Gdybyscie potrzebowali kiedys pomocy nie wahajcie sie nas wzywac. Na nas juz pora mlody. "
                                        "Wracamy do bazy.");
                 sleep(2000);
+            }
+
+            if (dragon.name == "ZGUBA MIAST"){
+                cout << "Starszy Strazak Franciszek: ";
+                print_letter_by_letter("Ugh! Myslalem, ze nie ujdziemy z tego calo! Mial naprawde solidny pancerz. W zasadzie to...");
+                sleep(2000);
+                cout << "[TRACHH!!]" << endl;
+                cout << "Starszy Strazak Franciszek: ";
+                print_letter_by_letter("Mozemy go uzyc do ulepszenia broni! Zostalo nam tylko starcie z WLADCA ZARU - jezeli on "
+                                       " faktycznie istnieje... W tej walce kazde ulepszenie jest na wage zlota...");
+                cout << "[+] DODANO PRZEDMIOT: GASNICA ZE SMOCZEJ LUSKI";
+                cout << "[+] ULEPSZONO BOMBY WODNE";
+                player.waterBomb_lvl ++;
+                player.extinguisher_lvl ++;
             }
 
             if (dragon.name != "NIKCZEMNIUCH"){
