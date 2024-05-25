@@ -353,7 +353,7 @@ int fight(Firefighter &player, Dragon &dragon) {
                             base_player_damage = 60;
                             break;
                         case 5:
-                            base_player_damage = 100;
+                            base_player_damage = 90;
                             break;
                     }
 
@@ -883,6 +883,44 @@ void SaveCityMission(Firefighter &player){
 }
 
 
+void GoodEnding(){
+    sleep(3000);
+    cout << "[TRAAACHHH!!!]";
+    sleep(2000);
+    cout << "Starszy Strazak Franciszek: ";
+    print_letter_by_letter("Cholera mlody. Udalo sie. SMOKI POKONANE!");
+    sleep(2000);
+    cout << "Starszy Strazak Franciszek: ";
+    print_letter_by_letter("Chlopaki! Chodzcie oglosic ludziom, ze to koniec walki z tymi gadami! PYROKLAS ZNOWU JEST WOLNY!");
+    sleep(2000);
+    cout << "[RYNEK W PYROKLESIE]" << endl;
+    cout << "Mieszkancy Pyroklasu: " << endl;
+    print_letter_by_letter("HURRA! NIECH ZYJA DZIELNI STRAZACY!");
+    sleep(2000);
+    print_letter_by_letter("HURRA! NIECH ZYJE WOLNY PYROKLAS!");
+    sleep(2000);
+    print_letter_by_letter("HURRA!! HURRA!! HURRA!!");
+    sleep(2000);
+    cout << endl << endl << endl;
+    print_letter_by_letter("Straznicy Zaru: Ognisty Konflikt");
+    print_letter_by_letter("Scenariusz i rezyseria: Jacob Digital Entertainment");
+
+    exit(0);
+}
+
+
+void BadEnding(){
+    cout << "Bad ending" << endl;
+    exit(0);
+}
+
+void NeutralEnding(){
+    cout << "Neutral ending" << endl;
+    exit(0);
+}
+
+
+
 void HuntForDragonMission(Firefighter &player, Dragon &burzogniew, Dragon &pyros, Dragon &zgubaMiast, Dragon &wladca_Zaru){
     if (burzogniew.health >= 0){
         if (player.waterBomb_lvl == 0 || player.extinguisher_lvl < 2){
@@ -900,11 +938,15 @@ void HuntForDragonMission(Firefighter &player, Dragon &burzogniew, Dragon &pyros
                 cout << "Starszy Strazak Franciszek: ";
                 print_letter_by_letter("Pamietaj, ze Cie ostrzegalem.");
                 sleep(2000);
-                fight(player, burzogniew);
+                if (fight(player, burzogniew) == -1){
+                    BadEnding();
+                }
             }
 
         } else {
-            fight(player, burzogniew);
+            if (fight(player, burzogniew) == -1){
+                BadEnding();
+            }
         }
 
     } else if (pyros.health >= 0){
@@ -923,11 +965,15 @@ void HuntForDragonMission(Firefighter &player, Dragon &burzogniew, Dragon &pyros
                 cout << "Starszy Strazak Franciszek: ";
                 print_letter_by_letter("Pamietaj, ze Cie ostrzegalem.");
                 sleep(2000);
-                fight(player, pyros);
+                if (fight(player, pyros) == -1){
+                    BadEnding();
+                }
             }
 
         } else {
-            fight(player, pyros);
+            if (fight(player, pyros) == -1){
+                BadEnding();
+            }
         }
     } else if (zgubaMiast.health >= 0){
 
@@ -946,11 +992,15 @@ void HuntForDragonMission(Firefighter &player, Dragon &burzogniew, Dragon &pyros
                 cout << "Starszy Strazak Franciszek: ";
                 print_letter_by_letter("Pamietaj, ze Cie ostrzegalem.");
                 sleep(2000);
-                fight(player, zgubaMiast);
+                if (fight(player, zgubaMiast) == -1){
+                    BadEnding();
+                }
             }
 
         } else {
-            fight(player, zgubaMiast);
+            if (fight(player, zgubaMiast) == -1){
+                BadEnding();
+            }
         }
 
     } else if (wladca_Zaru.health >= 0){
@@ -967,22 +1017,17 @@ void HuntForDragonMission(Firefighter &player, Dragon &burzogniew, Dragon &pyros
             return;
         } else {
             sleep(2000);
-            fight(player, wladca_Zaru);
+            if (fight(player, wladca_Zaru) == -1){
+                BadEnding();
+            } else {
+                if (player.respect_points < 600){
+                    NeutralEnding();
+                } else {
+                    GoodEnding();
+                }
+            }
         }
     }
-}
-
-void GoodEnding(){
-
-}
-
-
-void BadEnding(){
-
-}
-
-void NeutralEnding(){
-
 }
 
 
