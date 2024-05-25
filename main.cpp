@@ -891,7 +891,8 @@ void GoodEnding(){
     print_letter_by_letter("Cholera mlody. Udalo sie. SMOKI POKONANE!");
     sleep(2000);
     cout << "Starszy Strazak Franciszek: ";
-    print_letter_by_letter("Chlopaki! Chodzcie oglosic ludziom, ze to koniec walki z tymi gadami! PYROKLAS ZNOWU JEST WOLNY!");
+    print_letter_by_letter("Chlopaki! Chodzcie oglosic ludziom, ze to koniec walki z tymi gadami! PYROKLAS ZNOWU JEST WOLNY! "
+                           "Szkoda, ze nie ma tu z nami Samuela.");
     sleep(2000);
     cout << "[RYNEK W PYROKLESIE]" << endl;
     cout << "Mieszkancy Pyroklasu: " << endl;
@@ -917,7 +918,7 @@ void BadEnding(){
     sleep(3000);
     print_letter_by_letter("\"Ku pamieci Straznikow Zaru - brygadzie strazakow walczacej z armia smokow\"?");
     sleep(3000);
-    print_letter_by_letter("A moze : \"Tu spoczywaja Strazacy walczacy w wojnie ze smokami\"?");
+    print_letter_by_letter("A moze: \"Tu spoczywaja Strazacy walczacy w wojnie ze smokami\"?");
     sleep(3000);
     print_letter_by_letter("To bez znaczenia.");
     sleep(3000);
@@ -939,7 +940,28 @@ void BadEnding(){
 }
 
 void NeutralEnding(){
-    cout << "Neutral ending" << endl;
+    cout << "Starszy Strazak Franciszek: ";
+    print_letter_by_letter("Udalo sie mlody. To koniec!");
+    sleep(2000);
+    cout << "Starszy Strazak Franciszek: ";
+    print_letter_by_letter("Miasto jest w ruinie, ale odbudujemy je. Zawsze je odbudowujemy.");
+    sleep(2000);
+    cout << "Starszy Strazak Franciszek: ";
+    print_letter_by_letter("Szkoda, ze Samuel tego nie doswiadczyl... Wolny Pyroklas marzyl mu sie... odkad pamietam.");
+    sleep(2000);
+    cout << "Strazak Marcel: ";
+    print_letter_by_letter("To co zrobimy teraz?");
+    cout << "Starszy Strazak Franciszek: ";
+    print_letter_by_letter("Powiemy ludziom, ze smoki zostaly pokonane i... to tyle. Odbudujemy nasza jednostke i "
+                           "wrocimy do dawnego zycia: gaszenia pozarow i sciagania kotow z drzew. ");
+    sleep(2000);
+    cout << "Starszy Strazak Franciszek: ";
+    print_letter_by_letter("Dzieki mlody. Bez Ciebie nie dalibysmy sobie rady.");
+
+    cout << endl << endl << endl;
+    print_letter_by_letter("Straznicy Zaru: Ognisty Konflikt");
+    print_letter_by_letter("Scenariusz i rezyseria: Jacob Digital Entertainment");
+
     exit(0);
 }
 
