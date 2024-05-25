@@ -117,7 +117,7 @@ public:
                 cout << "Gasnica: GASNICA DOWODCY" << endl;
                 break;
             case 4:
-                cout << "Gasnica: LEGENDARNA GASNICA" << endl;
+                cout << "Gasnica: LEGENDARNA GASNICA RYCERZA OGNIA" << endl;
                 break;
             case 5:
                 cout << "Gasnica: GASNICA ZE SMOCZEJ LUSKI" << endl;
@@ -273,6 +273,19 @@ int fight(Firefighter &player, Dragon &dragon) {
         print_letter_by_letter("Oho! Jest tutaj! Do ataku!");
     }
 
+    if (dragon.name == "PYROS"){
+        cout << "Starszy Strazak Franciszek: ";
+        print_letter_by_letter("Brygada Rycerzy Ognia zmaga sie wlasnie z atekiem jednego ze smokow i potrzebuja naszej pomocy! "
+                               "Ze wstepnych ustalen wynika, ze jest to PYROS! Nie tracmy czasu! Ruszajmy!");
+        sleep(2000);
+        cout << "[SIEDZIBA BRYGADY RYCERZY OGNIA]";
+        cout << "Rycerz Ognia Artur: ";
+        print_letter_by_letter("Dobrze, ze jestescie, bo juz nie dajemy sobie z nim rady. Jest znacznie potezniejszy "
+                               "niz przypuszczalismy!");
+        cout << "Starszy Strazak Franciszek: ";
+        print_letter_by_letter("UDERZMY W NIEGO RAZEM! DO ATAKU MLODY! ZA SAMUELAAA!");
+    }
+
     dragon.print_info();
     while (player.health >= 0 && dragon.health > 0) {
         int base_player_damage;
@@ -283,7 +296,6 @@ int fight(Firefighter &player, Dragon &dragon) {
             if (player.extinguisher_lvl > 0) {
                 cout << "1. Atak gasnica" << endl;
             }
-
             if (player.waterBomb_lvl > 0 && player.waterBomb_amt > 0) {
                 cout << "2. Bomba wodna" << endl;
             }
@@ -424,14 +436,33 @@ int fight(Firefighter &player, Dragon &dragon) {
 
             }
 
-            if (dragon.name != "NIKCZEMNIUCH"){
+            if (dragon.name == "PYROS"){
+                cout << "Rycerz Ognia Artur: ";
+                print_letter_by_letter("WOW! To byla ciezka walka! Odnieslismy ogromne straty i zostalo nam troche, atktualnie "
+                                       "nie potrzebnego sprzetu. Mysle, ze w ramach podziekowania za pomoc nalezy wam sie to: ");
+                cout << "[+] DODANO PRZEDMIOT: LEGENDARNA GASNICA RYCERZA OGNIA" << endl;
+                player.extinguisher_lvl++;
+                sleep(2000);
+                cout << "[+] ULEPSZONO BOMBY WODNE" << endl;
+                player.waterBomb_lvl++;
+                cout << "Rycerz Ognia Artur: ";
+                print_letter_by_letter("Chociaz tyle moge zrobic.");
                 cout << "Starszy Strazak Franciszek: ";
-                print_letter_by_letter("Wez to i polataj sie troche.");
-                cout << "[+] DODANO APTECZKI: 5";
-                player.medkits += 5;
+                print_letter_by_letter("Gdybyscie potrzebowali kiedys pomocy nie wahajcie sie nas wzywac. Na nas juz pora mlody. "
+                                       "Wracamy do bazy.");
+                sleep(2000);
             }
 
-
+            if (dragon.name != "NIKCZEMNIUCH"){
+                cout << "Starszy Strazak Franciszek: ";
+                print_letter_by_letter("Wez to i opatrz rany.");
+                cout << "[+] DODANO APTECZKI: 5";
+                sleep(1000);
+                player.medkits += 5;
+                player.max_health += 60;
+                cout << "[ZWIEKSZONO MAKSYMALNE ZDROWIE DO "<< player.max_health << "]" << endl;
+                cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
+            }
 
             return 1;
         }
@@ -646,23 +677,21 @@ void SCMission1(Firefighter &player){
 
     cout << endl << "[MISJA ZAKONCZONA SUKCESEM]" << endl;
     cout << "Zdobywasz: 210xp." << endl;
+    player.experience += 210;
 
     if (player.waterBomb_lvl > 0){
         random_device rd;
         mt19937 gen(rd());
 
-        uniform_int_distribution<> dis(0, 1);
         uniform_int_distribution<> dis2(1,3);
-        int isBombFound = dis(gen);
-        if (isBombFound == 1){
-            int foundBombsAmt = dis2(gen);
-            cout << "[+] ZNALEZIONO BOMBY WODNE: " << foundBombsAmt << endl;
-        }
+
+        int foundBombsAmt = dis2(gen);
+        cout << "[+] ZNALEZIONO BOMBY WODNE: " << foundBombsAmt << endl;
     }
     player.max_health += 25;
     cout << "[ZWIEKSZONO MAKSYMALNE ZDROWIE DO "<< player.max_health << "]" << endl;
     cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
-    player.experience += 210;
+
 
     if (player.waterBomb_lvl == 0){
         sleep(3000);
@@ -675,7 +704,7 @@ void SCMission1(Firefighter &player){
         print_letter_by_letter("Ha! Tak wlasnie myslalem! TO BOMBY WODNE! Wez sobie troche.");
         cout << "[+] DODANO BOMBY WODNE: 3" << endl;
         sleep(1000);
-        player.waterBomb_lvl += 1;
+        player.waterBomb_lvl++;
         player.waterBomb_amt += 3;
         cout << "Starszy Strazak Franciszek: ";
         print_letter_by_letter("To bardzo potezna bron, ktora swietnie sprawdza sie w walce ze Smokami. "
@@ -748,13 +777,11 @@ void SCMission2(Firefighter &player){
         random_device rd;
         mt19937 gen(rd());
 
-        uniform_int_distribution<> dis(0, 1);
         uniform_int_distribution<> dis2(1,3);
-        int isBombFound = dis(gen);
-        if (isBombFound == 1){
-            int foundBombsAmt = dis2(gen);
-            cout << "[+] ZNALEZIONO BOMBY WODNE: " << foundBombsAmt << endl;
-        }
+
+        int foundBombsAmt = dis2(gen);
+        cout << "[+] ZNALEZIONO BOMBY WODNE: " << foundBombsAmt << endl;
+
     }
     player.max_health += 20;
     cout << "[ZWIEKSZONO MAKSYMALNE ZDROWIE DO "<< player.max_health << "]" << endl;
@@ -807,7 +834,7 @@ void SaveCityMission(Firefighter &player){
 
 void HuntForDragonMission(Firefighter &player, Dragon &burzogniew, Dragon &pyros, Dragon &zgubaMiast, Dragon &wladca_Zaru){
     if (burzogniew.health >= 0){
-        if (player.waterBomb_lvl == 0){
+        if (player.waterBomb_lvl == 0 || player.extinguisher_lvl < 2){
             cout << "Starszy Strazak Franciszek: ";
             print_letter_by_letter("Wedlug mnie to teraz zly pomysl. Lepiej bedzie wybrac sie na misje gaszenia pozaru. "
                                    "Byc moze uda nam sie znalezc dla Ciebie lepszy sprzet. Jesli jednak chesz wyruszyc na polowanie "
@@ -821,6 +848,7 @@ void HuntForDragonMission(Firefighter &player, Dragon &burzogniew, Dragon &pyros
             } else {
                 cout << "Starszy Strazak Franciszek: ";
                 print_letter_by_letter("Pamietaj, ze Cie ostrzegalem.");
+                sleep(2000);
                 fight(player, burzogniew);
             }
 
@@ -829,12 +857,49 @@ void HuntForDragonMission(Firefighter &player, Dragon &burzogniew, Dragon &pyros
         }
 
     } else if (pyros.health >= 0){
+        if (player.health < 300){
+            cout << "Starszy Strazak Franciszek: ";
+            print_letter_by_letter("Wedlug mnie to teraz zly pomysl. Powinnismy lepiej sie przygotowac. "
+                                   "Byc moze uda nam sie znalezc dla Ciebie lepszy sprzet. Jesli jednak chesz wyruszyc na polowanie "
+                                   "- nie zatrzymuje Cie.");
+            cout << "Wybierz akcje:" << endl;
+            cout << "1. Wyrusz na polowanie." << endl;
+            cout << "2. Powrot." << endl;
+            int choice = getChoice();
+            if (choice != 1){
+                return;
+            } else {
+                cout << "Starszy Strazak Franciszek: ";
+                print_letter_by_letter("Pamietaj, ze Cie ostrzegalem.");
+                sleep(2000);
+                fight(player, pyros);
+            }
 
-        fight(player, pyros);
-
+        } else {
+            fight(player, pyros);
+        }
     } else if (zgubaMiast.health >= 0){
 
-        fight(player, zgubaMiast);
+        if (player.health < 400){
+            cout << "Starszy Strazak Franciszek: ";
+            print_letter_by_letter("Uwazam, ze nie jestesmy jeszcze gotowi. Byc moze uda nam sie znalezc lepszy sprzet. "
+                                   "Jesli jednak chesz wyruszyc na polowanie - nie zatrzymuje Cie.");
+            cout << "Wybierz akcje:" << endl;
+            cout << "1. Wyrusz na polowanie." << endl;
+            cout << "2. Powrot." << endl;
+            int choice = getChoice();
+            if (choice != 1){
+                return;
+            } else {
+                cout << "Starszy Strazak Franciszek: ";
+                print_letter_by_letter("Pamietaj, ze Cie ostrzegalem.");
+                sleep(2000);
+                fight(player, zgubaMiast);
+            }
+
+        } else {
+            fight(player, zgubaMiast);
+        }
 
     } else if (wladca_Zaru.health >= 0){
 
@@ -845,9 +910,9 @@ void HuntForDragonMission(Firefighter &player, Dragon &burzogniew, Dragon &pyros
 int main() {
     Dragon Nikczemniuch("NIKCZEMNIUCH",60,20);
     Dragon Burzogniew("BURZOGNIEW",100,50);
-    Dragon Pyros("PYROS",500,70);
-    Dragon Zguba_Miast("ZGUBA MIAST",700,90);
-    Dragon Wladca_Zaru("WLADCA ZARU", 1000, 120);
+    Dragon Pyros("PYROS",500,60);
+    Dragon Zguba_Miast("ZGUBA MIAST",700,80);
+    Dragon Wladca_Zaru("WLADCA ZARU", 1000, 100);
 
     Firefighter player;
 
