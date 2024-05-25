@@ -698,12 +698,33 @@ void SCMission1(Firefighter &player){
                            "a pozostale zamkniete. Zawor otwarty jest oznaczony litera O, zamkniety Z. "
                            "\nAktualny schemat rurociagow wyglada tak: ");
     sleep(1000);
-    cout << endl << endl;
-    cout << "Hydrant -> [Zawor 1] -> [AWARIA (X/X)] -> [Zawor 6] -> [Zawor 7] -> Budynek" << endl;
-    cout << "        \\                                             /" << endl;
-    cout << "          [Zawor 2] -> [Zawor 3] -> [Zawor 4] -> [Zawor 5]" << endl;
+    random_device rd;
+    mt19937 gen(rd());
 
-    string sequence = "ZOOOOZO";
+    uniform_int_distribution<> dis(1,2);
+
+    int valve_type = dis(gen);
+    string sequence;
+    if (valve_type == 1) {
+        cout << endl << endl;
+        cout << "Hydrant -> [Zawor 1] -> [AWARIA (X/X)] -> [Zawor 6] -> [Zawor 7] -> Budynek" << endl;
+        cout << "        \\                                             /" << endl;
+        cout << "          [Zawor 2] -> [Zawor 3] -> [Zawor 4] -> [Zawor 5]" << endl;
+
+
+        sequence = "ZOOOOZO";
+    } else {
+        cout << endl << endl;
+        cout << "          [Zawor 1] -> [Zawor 3] -> [Zawor 4] -> [Zawor 7]";
+        cout << "         /                              \\ ";
+        cout << "Hydrant                               [Zawor 5]             [Zawor 9] -> Budynek" << endl;
+        cout << "        \\                                 \\                 /" << endl;
+        cout << "          [Zawor 2] -> [AWARIA (X/X)] -> [Zawor 6] -> [Zawor 8]" << endl;
+
+
+        sequence = "OZOOOOZOO";
+    }
+
     bool sequence_correct = false;
     while (!sequence_correct) {
         cout << endl;
@@ -731,8 +752,6 @@ void SCMission1(Firefighter &player){
     player.experience += 210;
 
     if (player.waterBomb_lvl > 0){
-        random_device rd;
-        mt19937 gen(rd());
 
         uniform_int_distribution<> dis2(1,3);
 
