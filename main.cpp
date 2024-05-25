@@ -22,7 +22,7 @@ public:
     Dragon(string n, int h, int d) : name(std::move(n)), health(h), damage(d) {}
 
     void print_info() const {
-        cout << "[" << name << "]" << endl;
+        cout << endl << "[" << name << "]" << endl;
         if (name == "NIKCZEMNIUCH" || name == "WLADCA ZARU") {
             cout << "Sila: brak danych" << endl;
         } else {
@@ -269,7 +269,7 @@ int fight(Firefighter &player, Dragon &dragon) {
 
     if (dragon.name == "BURZOGNIEW"){
         cout << "Dowodca Strazakow Samuel: ";
-        print_letter_by_letter("UWAGA WSZYSCY PELNA MOBILIZACJA! Namierzylismy BURZOGNIEWA! Terroryzuje ludzi w parku!"
+        print_letter_by_letter("UWAGA WSZYSCY PELNA MOBILIZACJA! Namierzylismy BURZOGNIEWA! Terroryzuje ludzi w parku! "
                                "Ruszajmy tam zanim sie zmyje!");
         sleep(2000);
         cout << "[PYROKLAS - PARK MIEJSKI]" << endl;
@@ -282,7 +282,7 @@ int fight(Firefighter &player, Dragon &dragon) {
         print_letter_by_letter("Brygada Rycerzy Ognia zmaga sie wlasnie z atekiem jednego ze smokow i potrzebuja naszej pomocy! "
                                "Ze wstepnych ustalen wynika, ze jest to PYROS! Nie tracmy czasu! Ruszajmy!");
         sleep(2000);
-        cout << "[SIEDZIBA BRYGADY RYCERZY OGNIA]";
+        cout << "[SIEDZIBA BRYGADY RYCERZY OGNIA]" << endl;
         cout << "Rycerz Ognia Artur: ";
         print_letter_by_letter("Dobrze, ze jestescie, bo juz nie dajemy sobie z nim rady. Jest znacznie potezniejszy "
                                "niz przypuszczalismy!");
@@ -293,10 +293,10 @@ int fight(Firefighter &player, Dragon &dragon) {
     if (dragon.name == "ZGUBA MIAST"){
         cout << "Starszy Strazak Franciszek: ";
         print_letter_by_letter("UWAGA! NAMIERZYLISMY ZGUBE MIAST! Sluchaj mlody - to NAJPOTEZNIEJSZY znany nam smok! "
-                               "Bomby wodne od Ryczerzy Ognia swietnie sie sprawdza przeciwko niemu!"
+                               "Bomby wodne od Ryczerzy Ognia swietnie sie sprawdza przeciwko niemu! "
                                "Wyladowal na rynku i atakuje mieszkancow! Ruchy mlody! DO SAMOCHODU! ");
         sleep(2000);
-        cout << "[RYNEK W PYROKLESIE]";
+        cout << "[RYNEK W PYROKLESIE]" << endl;
         cout << "Starszy Strazak Franciszek: ";
         print_letter_by_letter("Mamy go! Teraz mlody! DAJMY MU POPALIC!");
 
@@ -445,6 +445,7 @@ int fight(Firefighter &player, Dragon &dragon) {
                                        "A ty swiezaku... wez to: ");
                 cout << "[+] DODANO PRZEDMIOT: GASNICA DOWODCY" << endl;
                 player.extinguisher_lvl  = 3;
+                cout << "Dowodca Strazakow Samuel: ";
                 print_letter_by_letter("Tobie [YHY] przyda sie bardziej... niz mi....");
                 cout << "Starszy Strazak Franciszek: ";
                 print_letter_by_letter("SAM NIE ROB TEGO! SLYSZYSZ MNIE SAM?! SAM SAAAM!");
@@ -481,8 +482,8 @@ int fight(Firefighter &player, Dragon &dragon) {
                 cout << "Starszy Strazak Franciszek: ";
                 print_letter_by_letter("Mozemy go uzyc do ulepszenia broni! Zostalo nam tylko starcie z WLADCA ZARU - jezeli on "
                                        " faktycznie istnieje... W tej walce kazde ulepszenie jest na wage zlota...");
-                cout << "[+] DODANO PRZEDMIOT: GASNICA ZE SMOCZEJ LUSKI";
-                cout << "[+] ULEPSZONO BOMBY WODNE";
+                cout << "[+] DODANO PRZEDMIOT: GASNICA ZE SMOCZEJ LUSKI" << endl;
+                cout << "[+] ULEPSZONO BOMBY WODNE" << endl;
                 player.waterBomb_lvl ++;
                 player.extinguisher_lvl ++;
             }
@@ -490,7 +491,7 @@ int fight(Firefighter &player, Dragon &dragon) {
             if (dragon.name != "NIKCZEMNIUCH"){
                 cout << "Starszy Strazak Franciszek: ";
                 print_letter_by_letter("Wez to i opatrz rany.");
-                cout << "[+] DODANO APTECZKI: 5";
+                cout << "[+] DODANO APTECZKI: 5" << endl;
                 sleep(1000);
                 player.medkits += 5;
                 player.max_health += 60;
@@ -830,7 +831,7 @@ void SCMission2(Firefighter &player){
         cout << "Starszy Strazak Franciszek: ";
         print_letter_by_letter("Zamknieta. Budynek jest w takim stanie, ze lada chwila moze sie zawalic.");
         sleep(2000);
-        cout << "[BRZDEKKK!]";
+        cout << "[BRZDEKKK!]" << endl;
         cout << "Starszy Strazak Franciszek: ";
         print_letter_by_letter("Zabierzmy ja stad. Szkoda by bylo gdyby zostala tu pod gruzami. W zasadzie to mozesz ja wziac. "
                                "Jest to lepszy model niz ten ktory dostales ode mnie w trakcie szkolenia. ");
@@ -891,10 +892,10 @@ void HuntForDragonMission(Firefighter &player, Dragon &burzogniew, Dragon &pyros
         }
 
     } else if (pyros.health >= 0){
-        if (player.health < 300){
+        if (player.health < 300 || player.waterBomb_amt < 3){
             cout << "Starszy Strazak Franciszek: ";
             print_letter_by_letter("Wedlug mnie to teraz zly pomysl. Powinnismy lepiej sie przygotowac. "
-                                   "Byc moze uda nam sie znalezc dla Ciebie lepszy sprzet. Jesli jednak chesz wyruszyc na polowanie "
+                                   "Byc moze uda nam sie znalezc troche bomby wodnych i lepszy sprzet. Jesli jednak chesz wyruszyc na polowanie "
                                    "- nie zatrzymuje Cie.");
             cout << "Wybierz akcje:" << endl;
             cout << "1. Wyrusz na polowanie." << endl;
@@ -914,9 +915,10 @@ void HuntForDragonMission(Firefighter &player, Dragon &burzogniew, Dragon &pyros
         }
     } else if (zgubaMiast.health >= 0){
 
-        if (player.health < 400){
+        if (player.health < 400 || player.waterBomb_amt < 3){
             cout << "Starszy Strazak Franciszek: ";
-            print_letter_by_letter("Uwazam, ze nie jestesmy jeszcze gotowi. Byc moze uda nam sie znalezc lepszy sprzet. "
+            print_letter_by_letter("Uwazam, ze nie jestesmy jeszcze gotowi. Powinnismy poszukac troche bomb wodnych. "
+                                   "Byc moze uda nam sie znalezc tez lepszy sprzet. "
                                    "Jesli jednak chesz wyruszyc na polowanie - nie zatrzymuje Cie.");
             cout << "Wybierz akcje:" << endl;
             cout << "1. Wyrusz na polowanie." << endl;
