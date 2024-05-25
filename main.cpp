@@ -811,14 +811,32 @@ void SCMission2(Firefighter &player){
                            "Niestety ma juz swoje lata i niektore litery sa nieczytelne. Ja nie potrafie tego odczytac. "
                            "Jestes w stanie podac mi kolory przewodow w kolejnosci jakiej nalezy odlaczac moduly? ");
 
-    string note =
-    "Czer  ny  rzewod: Lac y syr ne alar owa z pa  lem kont  lnym\n"
-    "Nie  e ki pr ewod: aczy czu niki d mu z panel m kontrol  m\n"
-    "Zie ony prze od: Lacz pan l kont olny z zasi  niem\n"
-    "Bi ly przew d: La  y czu  iki ci pla z pane em k  trolnym\n";
-    cout << endl << note << endl;
+    random_device rd;
+    mt19937 gen(rd());
 
-    string sequence = "NBCZ";
+    uniform_int_distribution<> dis(1,2);
+    int note_type = dis(gen);
+    string note;
+    string sequence;
+    if (note_type == 1) {
+        note =
+                "Czer  ny  rzewod: Lac y syr ne alar owa z pa  lem kont  lnym\n"
+                "Nie  e ki pr ewod: aczy czu niki d mu z panel m kontrol  m\n"
+                "Zie ony prze od: Lacz pan l kont olny z zasi  niem\n"
+                "Bi ly przew d: La  y czu  iki ci pla z pane em k  trolnym\n";
+
+        sequence = "NBCZ";
+    } else {
+        note =
+                "Zie ony prze od: Lac y syr ne alar owa z pa  lem kont  lnym\n"
+                "Nie  e ki pr ewod: aczy czu niki d mu z panel m kontrol  m\n"
+                "Bi ly przew d: Lacz pan l kont olny z zasi  niem\n"
+                "Czer  ny  rzewod: La  y czu  iki ci pla z pane em k  trolnym\n";
+
+        sequence = "NCZB";
+    }
+
+    cout << endl << note << endl;
     bool sequence_correct = false;
     while (!sequence_correct) {
         cout << endl;
@@ -844,8 +862,6 @@ void SCMission2(Firefighter &player){
     cout << endl << "[MISJA ZAKONCZONA SUKCESEM]" << endl;
     cout << "Zdobywasz: 190xp." << endl;
     if (player.waterBomb_lvl > 0){
-        random_device rd;
-        mt19937 gen(rd());
 
         uniform_int_distribution<> dis2(1,3);
 
