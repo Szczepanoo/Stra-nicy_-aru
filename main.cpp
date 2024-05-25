@@ -302,6 +302,22 @@ int fight(Firefighter &player, Dragon &dragon) {
 
     }
 
+    if (dragon.name == "WLADCA ZARU"){
+        cout << "[TRACHH!!!]" << endl;
+        cout << "Starszy Strazak Franciszek: ";
+        print_letter_by_letter("Co sie dzieje?! BUDYNEK ZACZYNA PEKAC W POL!!!");
+        cout << "[BUUCH!!]" << endl;
+        cout << "Strazak Marcel: ";
+        print_letter_by_letter("UCIEKAJMY Z BUDYNKU! ZARAZ SIE ZAWALI!!");
+        cout << "Wladca Zaru: ";
+        print_letter_by_letter("[KRAA!!] KTO SMIE ZAKLOCAC ODWIECZY SPOKOJ SMOCZEJ CYWYLIZACJI!!");
+        cout << "Starszy Strazak Franciszek: ";
+        print_letter_by_letter("O cholera!! TO WLADCA ZARU!! MUSIMY GO POKONAC!! DO ATAKU!!");
+        cout << "Wladca Zaru: ";
+        print_letter_by_letter("NIC Z TEGO NEDZNI STRAZACY! [KRRRAA!] POZALUJECIE SWYCH DECYZJI!!");
+    }
+
+
     dragon.print_info();
     while (player.health >= 0 && dragon.health > 0) {
         int base_player_damage;
@@ -938,17 +954,45 @@ void HuntForDragonMission(Firefighter &player, Dragon &burzogniew, Dragon &pyros
         }
 
     } else if (wladca_Zaru.health >= 0){
+        cout << "[===UWAGA===]" << endl;
+        print_letter_by_letter("Przystepujesz teraz do finalowej misji po ktorej nastapi epilog. Po przejsciu dalej "
+                               "nie bedziesz miec mozliwosci powrotu do Siedziby Straznikow Zaru. Jesli chesz wykonac wiecej misji "
+                               "wroc teraz do Centrum Dowodzenia.");
 
-        fight(player, wladca_Zaru);
+        cout << "Wybierz akcje:" << endl;
+        cout << "1. Kontynuuj." << endl;
+        cout << "2. Powrot do bazy." << endl;
+        int choice = getChoice();
+        if (choice != 1){
+            return;
+        } else {
+            sleep(2000);
+            fight(player, wladca_Zaru);
+        }
     }
 }
+
+void GoodEnding(){
+
+}
+
+
+void BadEnding(){
+
+}
+
+void NeutralEnding(){
+
+}
+
+
 
 int main() {
     Dragon Nikczemniuch("NIKCZEMNIUCH",60,20);
     Dragon Burzogniew("BURZOGNIEW",100,50);
     Dragon Pyros("PYROS",500,60);
     Dragon Zguba_Miast("ZGUBA MIAST",700,80);
-    Dragon Wladca_Zaru("WLADCA ZARU", 1000, 100);
+    Dragon Wladca_Zaru("WLADCA ZARU", 1200, 120);
 
     Firefighter player;
 
