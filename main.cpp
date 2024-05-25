@@ -910,7 +910,31 @@ void GoodEnding(){
 
 
 void BadEnding(){
-    cout << "Bad ending" << endl;
+    sleep(3000);
+    print_letter_by_letter("...");
+    sleep(3000);
+    print_letter_by_letter("To koniec.");
+    sleep(3000);
+    print_letter_by_letter("\"Ku pamieci Straznikow Zaru - brygadzie strazakow walczacej z armia smokow\"?");
+    sleep(3000);
+    print_letter_by_letter("A moze : \"Tu spoczywaja Strazacy walczacy w wojnie ze smokami\"?");
+    sleep(3000);
+    print_letter_by_letter("To bez znaczenia.");
+    sleep(3000);
+    print_letter_by_letter("Wiesz co ma znaczenie?");
+    sleep(3000);
+    print_letter_by_letter("Ze Pyroklas nie dalo sie uratowac.");
+    sleep(3000);
+    print_letter_by_letter("To od poczatku byla operacja skazana na porazke.");
+    sleep(3000);
+    print_letter_by_letter("Zrobiles wszystko co mogles");
+    sleep(3000);
+    print_letter_by_letter("Prawda?");
+
+    cout << endl << endl << endl;
+    print_letter_by_letter("Straznicy Zaru: Ognisty Konflikt");
+    print_letter_by_letter("Scenariusz i rezyseria: Jacob Digital Entertainment");
+
     exit(0);
 }
 
@@ -1033,6 +1057,7 @@ void HuntForDragonMission(Firefighter &player, Dragon &burzogniew, Dragon &pyros
 
 
 int main() {
+    BadEnding();
     Dragon Nikczemniuch("NIKCZEMNIUCH",60,20);
     Dragon Burzogniew("BURZOGNIEW",100,50);
     Dragon Pyros("PYROS",500,60);
