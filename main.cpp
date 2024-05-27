@@ -11,6 +11,7 @@
 
 using namespace std;
 
+
 // Klasa reprezentująca smoka
 class Dragon {
 public:
@@ -20,6 +21,7 @@ public:
 
     Dragon(string n, int h, int d) : name(std::move(n)), health(h), damage(d) {}
 
+    // Wyswietlnie (przed walką) informacji o smoku
     void print_info() const {
         cout << endl << "[" << name << "]" << endl;
         if (name == "NIKCZEMNIUCH" || name == "WLADCA ZARU") {
@@ -34,6 +36,7 @@ public:
         }
     }
 };
+
 
 // Klasa reprezentująca gracza-strażaka
 class Firefighter {
@@ -56,6 +59,7 @@ public:
     Firefighter() : health(120), max_health(120), experience(0), extinguisher_lvl(0), waterBomb_lvl(0),
     waterBomb_amt(0), medkits(0), respect_points(0), burzogniew_hp(100), pyros_hp(500), zguba_miast_hp(700), wladca_zaru_hp(1000){}
 
+    // Constructor
     Firefighter(string name, int health, int max_health, int experience,int extinguisher_lvl, int waterBomb_lvl,
                 int waterBomb_amt, int medkits, int respect_points, int burzogniew_hp, int pyros_hp, int zguba_miast_hp, int wladca_zaru_hp):
             name(std::move(name)),
@@ -72,6 +76,7 @@ public:
             zguba_miast_hp(zguba_miast_hp),
             wladca_zaru_hp(wladca_zaru_hp) {}
 
+            // Funkcja zapisująca gre
     void saveGame(Dragon &burzogniew, Dragon &pyros, Dragon &zguba_miast, Dragon &wladca_zaru) {
         const string filename = "game_saves.csv";
 
@@ -100,10 +105,13 @@ public:
             file.close();
             cout << "[ZAPISANO GRE]" << endl;
         } else {
-            cerr << "[WYSTAPIL BLAD PODCZAS ZAPISU]" << filename << endl;
+
+            // Blad przy otwarciu pliku
+            cout << "[WYSTAPIL BLAD PODCZAS ZAPISU]" << filename << endl;
         }
     }
 
+    // Funkcja pokazująca ekwipunek i podstawowe statystyki
     void showEquiment() const{
         cout << endl << "[" << name << "]" << endl;
         cout << "Doswiadczenie: " << experience << endl;
@@ -139,6 +147,7 @@ public:
 
 };
 
+
 // Funkcja pobierajaca liczbe od uzytkownika
 int getChoice(){
     string choiceStr;
@@ -147,10 +156,12 @@ int getChoice(){
     try {
         choice = stoi(choiceStr);
     } catch (invalid_argument &){
+        //Zwaracamy -999 w przypadku błędu konwersji
         choice = -999;
     }
     return choice;
 }
+
 
 // Funkcja wczytująca grę
 Firefighter loadGame() {
@@ -211,14 +222,16 @@ Firefighter loadGame() {
     } else {
         cout << "[NIE ZNALEZIONO ZAPISANYCH STANOW GRY]" << endl;
         cout << "[STWORZONO NOWA POSTAC]" << endl;
-        return {}; // Zwracanie domyślnej postaci w razie błędu
+        return {}; // Zwracanie domyślnej (nowej) postaci w razie błędu
     }
 }
 
 
+// Funkcja zatrzymujaca grę na określony czas
 void sleep(int time_ms){
     this_thread::sleep_for(chrono::milliseconds(time_ms));
 }
+
 
 // Funkcja wyswietlajaca wypowiadane kwestie
 void print_letter_by_letter(string string){
@@ -242,6 +255,7 @@ string toUpperCase(const string& input) {
 
 }
 
+
 // Funkcja szyfrująca szyfrem Cezara
 string encryptCaesar(const string& text, int shift) {
     string result;
@@ -258,15 +272,18 @@ string encryptCaesar(const string& text, int shift) {
     return result;
 }
 
+
 // Funkcja deszyfrująca szyfr Cezara
 string decryptCaesar(const string& text, int shift) {
     return encryptCaesar(text, 26 - (shift % 26));
 }
 
 
+// Funkcja walki z bossami
 int fight(Firefighter &player, Dragon &dragon) {
     int max_dragon_health = dragon.health;
 
+    // Intro do bitwy z drugim bossem - pierwszy jest w prologu
     if (dragon.name == "BURZOGNIEW"){
         cout << "Dowodca Strazakow Samuel: ";
         print_letter_by_letter("UWAGA WSZYSCY PELNA MOBILIZACJA! Namierzylismy BURZOGNIEWA! Terroryzuje ludzi w parku! "
@@ -277,6 +294,7 @@ int fight(Firefighter &player, Dragon &dragon) {
         print_letter_by_letter("Oho! Jest tutaj! Do ataku!");
     }
 
+    // Intro do bitwy z trzecim bossem
     if (dragon.name == "PYROS"){
         cout << "Starszy Strazak Franciszek: ";
         print_letter_by_letter("Brygada Rycerzy Ognia zmaga sie wlasnie z atakiem jednego ze smokow i potrzebuja naszej pomocy! "
@@ -290,6 +308,7 @@ int fight(Firefighter &player, Dragon &dragon) {
         print_letter_by_letter("UDERZMY W NIEGO RAZEM! DO ATAKU MLODY! ZA SAMUELAAA!");
     }
 
+    // Intro do walki z czwartym bossem
     if (dragon.name == "ZGUBA MIAST"){
         cout << "Starszy Strazak Franciszek: ";
         print_letter_by_letter("UWAGA! NAMIERZYLISMY ZGUBE MIAST! Sluchaj mlody - to NAJPOTEZNIEJSZY znany nam smok! "
@@ -299,9 +318,9 @@ int fight(Firefighter &player, Dragon &dragon) {
         cout << "[RYNEK W PYROKLESIE]" << endl;
         cout << "Starszy Strazak Franciszek: ";
         print_letter_by_letter("Mamy go! Teraz mlody! DAJMY MU POPALIC!");
-
     }
 
+    // Intro do walki z piątym bossem
     if (dragon.name == "WLADCA ZARU"){
         cout << "[TRACHH!!!]" << endl;
         cout << "Starszy Strazak Franciszek: ";
@@ -317,8 +336,10 @@ int fight(Firefighter &player, Dragon &dragon) {
         print_letter_by_letter("NIC Z TEGO NEDZNI STRAZACY! [KRRRAA!] POZALUJECIE SWYCH DECYZJI!!");
     }
 
-
+    // Wyświetlenie informacji o aktualnym bossie
     dragon.print_info();
+
+    // Główna pętla walki
     while (player.health >= 0 && dragon.health > 0) {
         int base_player_damage;
         bool choice_accepted = false;
@@ -334,7 +355,6 @@ int fight(Firefighter &player, Dragon &dragon) {
             if (player.medkits > 0){
                 cout << "9. Apteczka" << endl;
             }
-
 
             int choice = getChoice();
             switch (choice) {
@@ -378,10 +398,6 @@ int fight(Firefighter &player, Dragon &dragon) {
                         cout << "Nieprawidlowy wybor." << endl;
                     }
                     break;
-                case 3:
-                    base_player_damage = -10;
-                    choice_accepted = true;
-                    break;
                 case 9:
                     if (player.medkits > 0){
                         base_player_damage = 0;
@@ -400,6 +416,8 @@ int fight(Firefighter &player, Dragon &dragon) {
         //Generator liczb losowych z losowym ziarniem
         random_device rd;
         mt19937 gen(rd());
+
+        // Zadanych obrażeń +/- 25% obrażeń bazowych
         uniform_int_distribution<> dis(static_cast<int>(base_player_damage * 0.75), static_cast<int>(base_player_damage * 1.25));
         int real_player_damage = dis(gen);
 
@@ -435,11 +453,14 @@ int fight(Firefighter &player, Dragon &dragon) {
         player.health -= real_dragon_damage;
         cout << dragon.name << " atakuje zadajac " << real_dragon_damage << " obrazen!" << endl << endl;
         cout << "Poziom twojego zdrowia: " << player.health << "/" << player.max_health << endl;
+
+        // Ukrycie poziomu zdrowia finałowego bossa
         if (dragon.name == "WLADCA ZARU"){
             cout << "Poziom zdrowia przeciwnika: ???/???" << endl;
         } else{
             cout << "Poziom zdrowia przeciwnika: " << dragon.health << "/" << max_dragon_health << endl;
         }
+
         if (player.health <= 0) {
             cout << "Porazka" << endl;
             player.experience += 1;
@@ -455,6 +476,7 @@ int fight(Firefighter &player, Dragon &dragon) {
             cin.ignore();
             cin.get();
 
+            // Outro bitwy z drugim bossem
             if (dragon.name == "BURZOGNIEW"){
                 cout << "Starszy Strazak Franciszek: ";
                 print_letter_by_letter("SAMUEL OBERWAL! DAJCIE APTECZKE!");
@@ -473,9 +495,9 @@ int fight(Firefighter &player, Dragon &dragon) {
                 cout << "Starszy Strazak Franciszek: ";
                 print_letter_by_letter("Przegrupujcie sie i widzimy sie w bazie. Te smoki musza za to zaplacic...");
                 sleep(2000);
-
             }
 
+            // Outro bitwy z trzecim bossem
             if (dragon.name == "PYROS"){
                 cout << "Rycerz Ognia Artur: ";
                 print_letter_by_letter("WOW! To byla ciezka walka! Odnieslismy ogromne straty i zostalo nam troche, atktualnie "
@@ -493,6 +515,7 @@ int fight(Firefighter &player, Dragon &dragon) {
                 sleep(2000);
             }
 
+            // Outro bitwy z czwartym bossem
             if (dragon.name == "ZGUBA MIAST"){
                 cout << "Starszy Strazak Franciszek: ";
                 print_letter_by_letter("Ugh! Myslalem, ze nie ujdziemy z tego calo! Mial naprawde solidny pancerz. W zasadzie to...");
@@ -507,6 +530,7 @@ int fight(Firefighter &player, Dragon &dragon) {
                 player.extinguisher_lvl ++;
             }
 
+            // Dodanie apteczek i zdrowia, jeśli nie jest to pierwsza lub ostatnia walka
             if (dragon.name != "NIKCZEMNIUCH" && dragon.name != "WLADCA ZARU"){
                 cout << "Starszy Strazak Franciszek: ";
                 print_letter_by_letter("Wez to i opatrz rany.");
@@ -526,6 +550,7 @@ int fight(Firefighter &player, Dragon &dragon) {
 }
 
 
+// Pierwsza misja ratunkowa
 void RCMission1(Firefighter &player){
     random_device rd;
     mt19937 gen(rd());
@@ -593,6 +618,7 @@ void RCMission1(Firefighter &player){
 }
 
 
+// Druga misja ratunkowa
 void RCMission2(Firefighter &player){
     random_device rd;
     mt19937 gen(rd());
@@ -669,6 +695,7 @@ void RCMission2(Firefighter &player){
 }
 
 
+// Funkcja losująca misję ratunkową
 void RescueCivilianMission(Firefighter &player){
     random_device rd;
     mt19937 gen(rd());
@@ -692,6 +719,7 @@ void RescueCivilianMission(Firefighter &player){
 }
 
 
+// Pierwsza misja gaszenia pożaru
 void SCMission1(Firefighter &player){
     cout << "Starszy Strazak Franciszek: ";
     print_letter_by_letter("Szybko mlody. Wskakuj do samochodu! Wybuchl pozar w dzielnicy przemyslowej!");
@@ -760,6 +788,7 @@ void SCMission1(Firefighter &player){
     cout << "Zdobywasz: 210xp." << endl;
     player.experience += 210;
 
+    // Dodanie bomb wodnych jeśli są odblokowane
     if (player.waterBomb_lvl > 0){
 
         uniform_int_distribution<> dis2(1,3);
@@ -768,13 +797,14 @@ void SCMission1(Firefighter &player){
         cout << "[+] ZNALEZIONO BOMBY WODNE: " << foundBombsAmt << endl;
         player.waterBomb_amt += foundBombsAmt;
     }
+
     player.max_health += 25;
     cout << "[ZWIEKSZONO MAKSYMALNE ZDROWIE DO "<< player.max_health << "]" << endl;
     cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
     cin.ignore();
     cin.get();
 
-
+    // Odblokowanie bomb wodnych po pierwszym ukończeniu
     if (player.waterBomb_lvl == 0){
         sleep(3000);
         cout << "Starszy Strazak Franciszek: ";
@@ -801,6 +831,7 @@ void SCMission1(Firefighter &player){
 }
 
 
+// Druga misja gaszenia pożaru
 void SCMission2(Firefighter &player){
     cout << "Starszy Strazak Franciszek: ";
     print_letter_by_letter("Mlody! Ruszamy na pomoc chlopakom ktorzy walcza z pozarem w dzielnicy biurowej! "
@@ -875,6 +906,8 @@ void SCMission2(Firefighter &player){
     sleep(1000);
     cout << endl << "[MISJA ZAKONCZONA SUKCESEM]" << endl;
     cout << "Zdobywasz: 190xp." << endl;
+
+    // Dodanie bomb wodnych jeśli są odblokowane
     if (player.waterBomb_lvl > 0){
 
         uniform_int_distribution<> dis2(1,3);
@@ -890,6 +923,7 @@ void SCMission2(Firefighter &player){
     cin.ignore();
     cin.get();
 
+    // Ulepeszenie gaśnicy (jeśli jest na pierwszym poziomie) po pierwszym ukończeniu misji
     if (player.extinguisher_lvl == 1){
         sleep(2000);
         cout << "Starszy Strazak Franciszek: ";
@@ -909,6 +943,7 @@ void SCMission2(Firefighter &player){
 }
 
 
+// Funkcja losująca misje gaszenia pożaru
 void SaveCityMission(Firefighter &player){
     random_device rd;
     mt19937 gen(rd());
@@ -930,8 +965,9 @@ void SaveCityMission(Firefighter &player){
     }
 }
 
-
+// Funkcja obsługująca dobre zakończenie (wysoki poziom respektu + pokonanie finałowego bossa)
 void GoodEnding(){
+    system("cls");
     sleep(3000);
     cout << "[TRAAACHHH!!!]";
     sleep(2000);
@@ -957,9 +993,10 @@ void GoodEnding(){
     exit(0);
 }
 
-
+// Funkcja obsługująca złe zakończenie (porażka w walce z dowolnym bossem)
 void BadEnding(){
     sleep(3000);
+    system("cls");
     print_letter_by_letter("...");
     sleep(3000);
     print_letter_by_letter("To koniec.");
@@ -987,7 +1024,10 @@ void BadEnding(){
     exit(0);
 }
 
+
+// Funkcja obsługująca neturalne zakończenie (niski poziom respektu + pokonanie wszystkich bossów)
 void NeutralEnding(){
+    system("cls");
     cout << "Starszy Strazak Franciszek: ";
     print_letter_by_letter("Udalo sie mlody. To koniec!");
     sleep(2000);
@@ -1014,10 +1054,12 @@ void NeutralEnding(){
 }
 
 
-
+// Funkcja wybierająca misje polowania na smoki
 void HuntForDragonMission(Firefighter &player, Dragon &burzogniew, Dragon &pyros, Dragon &zgubaMiast, Dragon &wladca_Zaru){
     if (burzogniew.health >= 0){
         if (player.waterBomb_lvl == 0 || player.extinguisher_lvl < 2){
+
+            // Ostreżenie o słabym ekwipunku
             cout << "Starszy Strazak Franciszek: ";
             print_letter_by_letter("Wedlug mnie to teraz zly pomysl. Lepiej bedzie wybrac sie na misje gaszenia pozaru. "
                                    "Byc moze uda nam sie znalezc dla Ciebie lepszy sprzet. Jesli jednak chesz wyruszyc na polowanie "
@@ -1045,6 +1087,8 @@ void HuntForDragonMission(Firefighter &player, Dragon &burzogniew, Dragon &pyros
 
     } else if (pyros.health >= 0){
         if (player.health < 300 || player.waterBomb_amt < 3){
+
+            // Ostreżenie o słabym ekwipunku
             cout << "Starszy Strazak Franciszek: ";
             print_letter_by_letter("Wedlug mnie to teraz zly pomysl. Powinnismy lepiej sie przygotowac. "
                                    "Byc moze uda nam sie znalezc troche bomby wodnych i lepszy sprzet. Jesli jednak chesz wyruszyc na polowanie "
@@ -1072,6 +1116,8 @@ void HuntForDragonMission(Firefighter &player, Dragon &burzogniew, Dragon &pyros
     } else if (zgubaMiast.health >= 0){
 
         if (player.health < 400 || player.waterBomb_amt < 3){
+
+            // Ostrzeżenie o słabym ekwipunku
             cout << "Starszy Strazak Franciszek: ";
             print_letter_by_letter("Uwazam, ze nie jestesmy jeszcze gotowi. Powinnismy poszukac troche bomb wodnych. "
                                    "Byc moze uda nam sie znalezc tez lepszy sprzet. "
@@ -1098,6 +1144,8 @@ void HuntForDragonMission(Firefighter &player, Dragon &burzogniew, Dragon &pyros
         }
 
     } else if (wladca_Zaru.health >= 0){
+
+        // Informacja o ostatecznej walce
         cout << "[===UWAGA===]" << endl;
         print_letter_by_letter("Przystepujesz teraz do finalowej misji po ktorej nastapi epilog. Po przejsciu dalej "
                                "nie bedziesz miec mozliwosci powrotu do Siedziby Straznikow Zaru. Jesli chesz wykonac wiecej misji "
@@ -1125,7 +1173,9 @@ void HuntForDragonMission(Firefighter &player, Dragon &burzogniew, Dragon &pyros
 }
 
 
+// Główna funkcja
 int main() {
+    // Utworzenie przeciwników
     Dragon Nikczemniuch("NIKCZEMNIUCH",60,20);
     Dragon Burzogniew("BURZOGNIEW",100,50);
     Dragon Pyros("PYROS",500,60);
@@ -1134,6 +1184,7 @@ int main() {
 
     Firefighter player;
 
+    // Menu startowe
     bool showMenu = true;
     cout << "Straznicy Zaru: Ognisty Konflikt" << endl;
     while (showMenu) {
@@ -1147,6 +1198,7 @@ int main() {
                 break;
             case 2:
                 player = loadGame();
+                // Aktualizacja hp bossów po wczytaniu gry
                 Burzogniew.health = player.burzogniew_hp;
                 Pyros.health = player.pyros_hp;
                 Zguba_Miast.health = player.zguba_miast_hp;
@@ -1163,7 +1215,7 @@ int main() {
 
     }
 
-    // PROLOGUE
+    // Prolog
     if (player.experience == 0){
             system("cls");
             print_letter_by_letter("Witaj w miescie Pyroklas!");
@@ -1263,7 +1315,8 @@ int main() {
 
 
         }
-    // MAIN GAME LOOP
+
+    // Główna pętla gry
     bool gameOver = false;
     while (!gameOver) {
         cout << endl << "[CENTRUM DOWODZENIA]";
