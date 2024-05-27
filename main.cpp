@@ -11,7 +11,6 @@
 
 using namespace std;
 
-
 // Klasa reprezentująca smoka
 class Dragon {
 public:
@@ -76,7 +75,7 @@ public:
     void saveGame(Dragon &burzogniew, Dragon &pyros, Dragon &zguba_miast, Dragon &wladca_zaru) {
         const string filename = "game_saves.csv";
 
-        // Otwarcie pliku w trybie dopisywania
+        // Otwarcie pliku w trybie dopisywania, utworzy plik, jesli nie istnieje
         ofstream file(filename, ios::app);
 
         burzogniew_hp = burzogniew.health;
@@ -118,7 +117,7 @@ public:
                 cout << "Gasnica: ULEPSZONA GASNICA" << endl;
                 break;
             case 3:
-                cout << "Gasnica: GASNICA DOWODCY" << endl;
+                cout << "Gasnica: GASNICA DOWODCY SAMUELA" << endl;
                 break;
             case 4:
                 cout << "Gasnica: LEGENDARNA GASNICA RYCERZA OGNIA" << endl;
@@ -210,7 +209,7 @@ Firefighter loadGame() {
             }
         }
     } else {
-        cout << "[WYSTAPIL BLAD PODCZAS WCZYTYWANIA]" << endl;
+        cout << "[NIE ZNALEZIONO ZAPISANYCH STANOW GRY]" << endl;
         cout << "[STWORZONO NOWA POSTAC]" << endl;
         return {}; // Zwracanie domyślnej postaci w razie błędu
     }
@@ -426,7 +425,8 @@ int fight(Firefighter &player, Dragon &dragon) {
             cout << "Zdobywasz: 10xp" << endl;
             player.experience += 10;
             cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
-            cin.get();
+            char c;
+            cin >> c;
             return 1;
 
         }
@@ -443,14 +443,16 @@ int fight(Firefighter &player, Dragon &dragon) {
             cout << "Porazka" << endl;
             player.experience += 1;
             cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
-            cin.get();
+            char c;
+            cin >> c;
             return -1;
         } else if (dragon.health <= 0) {
             cout << "Zwyciestwo!" << endl;
             cout << "Zdobywasz: "<< max_dragon_health << "xp." << endl;
             player.experience += max_dragon_health;
             cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
-            cin.get();
+            char c;
+            cin >> c;
 
             if (dragon.name == "BURZOGNIEW"){
                 cout << "Starszy Strazak Franciszek: ";
@@ -513,6 +515,8 @@ int fight(Firefighter &player, Dragon &dragon) {
                 player.max_health += 60;
                 cout << "[ZWIEKSZONO MAKSYMALNE ZDROWIE DO "<< player.max_health << "]" << endl;
                 cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
+                char c;
+                cin >> c;
             }
 
             return 1;
@@ -573,6 +577,8 @@ void RCMission1(Firefighter &player){
                     cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
                     player.experience += 130;
                     player.respect_points += 250;
+                    char c;
+                    cin >> c;
 
                 } else {
                     cout << "Starszy Strazak Franek: ";
@@ -656,6 +662,8 @@ void RCMission2(Firefighter &player){
     cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
     player.experience += 100;
     player.respect_points += 150;
+    char c;
+    cin >> c;
 
 }
 
@@ -761,6 +769,8 @@ void SCMission1(Firefighter &player){
     player.max_health += 25;
     cout << "[ZWIEKSZONO MAKSYMALNE ZDROWIE DO "<< player.max_health << "]" << endl;
     cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
+    char c;
+    cin >> c;
 
 
     if (player.waterBomb_lvl == 0){
@@ -781,6 +791,7 @@ void SCMission1(Firefighter &player){
                                "Obrazenia jakie zadaja sa zalezne od stanu zdrowia przeciwnika. "
                                "Kilka takich sztuk wystarczy, aby oslabic bestie i dobic salwa z gasnicy. ");
         cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
+        cin >> c;
         sleep(2000);
     }
 
@@ -873,6 +884,8 @@ void SCMission2(Firefighter &player){
     cout << "[ZWIEKSZONO MAKSYMALNE ZDROWIE DO "<< player.max_health << "]" << endl;
     cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
     player.experience += 190;
+    char c;
+    cin >> c;
 
     if (player.extinguisher_lvl == 1){
         sleep(2000);
