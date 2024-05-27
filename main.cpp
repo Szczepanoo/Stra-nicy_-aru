@@ -675,9 +675,6 @@ void RescueCivilianMission(Firefighter &player){
         case 2:
             RCMission2(player);
             break;
-        case 3:
-            cout << "case 3";
-            break;
         default:
             cout << "[WYSTAPIL NIEZNANY BLAD]" << endl;
             break;
@@ -705,6 +702,7 @@ void SCMission1(Firefighter &player){
 
     int valve_type = dis(gen);
     string sequence;
+    int valves_amt;
     if (valve_type == 1) {
         cout << endl << endl;
         cout << "Hydrant -> [Zawor 1] -> [AWARIA (X/X)] -> [Zawor 6] -> [Zawor 7] -> Budynek" << endl;
@@ -713,23 +711,25 @@ void SCMission1(Firefighter &player){
 
 
         sequence = "ZOOOOZO";
+        valves_amt = 7;
     } else {
         cout << endl << endl;
-        cout << "          [Zawor 1] -> [Zawor 3] -> [Zawor 4] -> [Zawor 7]";
-        cout << "         /                              \\ ";
+        cout << "          [Zawor 1] -> [Zawor 3] -> [Zawor 4] -> [Zawor 7]" << endl;
+        cout << "         /                              \\ " << endl;
         cout << "Hydrant                               [Zawor 5]             [Zawor 9] -> Budynek" << endl;
         cout << "        \\                                 \\                 /" << endl;
         cout << "          [Zawor 2] -> [AWARIA (X/X)] -> [Zawor 6] -> [Zawor 8]" << endl;
 
 
         sequence = "OZOOOOZOO";
+        valves_amt = 9;
     }
 
     bool sequence_correct = false;
     while (!sequence_correct) {
         cout << endl;
         string user_sequence;
-        for (int i = 1; i <= 7; i++) {
+        for (int i = 1; i <= valves_amt; i++) {
             string user_input;
             cout << "Zawor " << i << " (O/Z): ";
             cin >> user_input;
@@ -907,9 +907,6 @@ void SaveCityMission(Firefighter &player){
             break;
         case 2:
             SCMission2(player);
-            break;
-        case 3:
-            cout << "case 3";
             break;
         default:
             cout << "[WYSTAPIL NIEZNANY BLAD]" << endl;
@@ -1112,9 +1109,7 @@ void HuntForDragonMission(Firefighter &player, Dragon &burzogniew, Dragon &pyros
 }
 
 
-
 int main() {
-    BadEnding();
     Dragon Nikczemniuch("NIKCZEMNIUCH",60,20);
     Dragon Burzogniew("BURZOGNIEW",100,50);
     Dragon Pyros("PYROS",500,60);
@@ -1151,7 +1146,7 @@ int main() {
         }
 
     }
-    //player.experience ++; // skipping prologue
+
     // PROLOGUE
     if (player.experience == 0){
             system("cls");
