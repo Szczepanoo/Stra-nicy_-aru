@@ -224,7 +224,7 @@ void sleep(int time_ms){
 void print_letter_by_letter(string string){
     for (int i = 0; i < string.length(); i ++){
         cout << string[i] << flush;
-        sleep(50);
+        sleep(20);
     }
     cout << endl;
 }
@@ -235,10 +235,11 @@ string toUpperCase(const string& input) {
     string result = input;
 
     for (char& c : result) {
-        c = toupper(c);
+        c = static_cast<char>(toupper(static_cast<unsigned char>(c)));
     }
 
     return result;
+
 }
 
 // Funkcja szyfrująca szyfrem Cezara
@@ -278,7 +279,7 @@ int fight(Firefighter &player, Dragon &dragon) {
 
     if (dragon.name == "PYROS"){
         cout << "Starszy Strazak Franciszek: ";
-        print_letter_by_letter("Brygada Rycerzy Ognia zmaga sie wlasnie z atekiem jednego ze smokow i potrzebuja naszej pomocy! "
+        print_letter_by_letter("Brygada Rycerzy Ognia zmaga sie wlasnie z atakiem jednego ze smokow i potrzebuja naszej pomocy! "
                                "Ze wstepnych ustalen wynika, ze jest to PYROS! Nie tracmy czasu! Ruszajmy!");
         sleep(2000);
         cout << "[SIEDZIBA BRYGADY RYCERZY OGNIA]" << endl;
@@ -425,8 +426,8 @@ int fight(Firefighter &player, Dragon &dragon) {
             cout << "Zdobywasz: 10xp" << endl;
             player.experience += 10;
             cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
-            char c;
-            cin >> c;
+            cin.ignore();
+            cin.get();
             return 1;
 
         }
@@ -443,16 +444,16 @@ int fight(Firefighter &player, Dragon &dragon) {
             cout << "Porazka" << endl;
             player.experience += 1;
             cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
-            char c;
-            cin >> c;
+            cin.ignore();
+            cin.get();
             return -1;
         } else if (dragon.health <= 0) {
             cout << "Zwyciestwo!" << endl;
             cout << "Zdobywasz: "<< max_dragon_health << "xp." << endl;
             player.experience += max_dragon_health;
             cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
-            char c;
-            cin >> c;
+            cin.ignore();
+            cin.get();
 
             if (dragon.name == "BURZOGNIEW"){
                 cout << "Starszy Strazak Franciszek: ";
@@ -506,17 +507,17 @@ int fight(Firefighter &player, Dragon &dragon) {
                 player.extinguisher_lvl ++;
             }
 
-            if (dragon.name != "NIKCZEMNIUCH"){
+            if (dragon.name != "NIKCZEMNIUCH" && dragon.name != "WLADCA ZARU"){
                 cout << "Starszy Strazak Franciszek: ";
                 print_letter_by_letter("Wez to i opatrz rany.");
-                cout << "[+] DODANO APTECZKI: 5" << endl;
+                cout << "[+] DODANO APTECZKI: 3" << endl;
                 sleep(1000);
-                player.medkits += 5;
+                player.medkits += 3;
                 player.max_health += 60;
                 cout << "[ZWIEKSZONO MAKSYMALNE ZDROWIE DO "<< player.max_health << "]" << endl;
                 cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
-                char c;
-                cin >> c;
+                cin.ignore();
+                cin.get();
             }
 
             return 1;
@@ -577,8 +578,8 @@ void RCMission1(Firefighter &player){
                     cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
                     player.experience += 130;
                     player.respect_points += 250;
-                    char c;
-                    cin >> c;
+                    cin.ignore();
+                    cin.get();
 
                 } else {
                     cout << "Starszy Strazak Franek: ";
@@ -662,8 +663,8 @@ void RCMission2(Firefighter &player){
     cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
     player.experience += 100;
     player.respect_points += 150;
-    char c;
-    cin >> c;
+    cin.ignore();
+    cin.get();
 
 }
 
@@ -765,12 +766,13 @@ void SCMission1(Firefighter &player){
 
         int foundBombsAmt = dis2(gen);
         cout << "[+] ZNALEZIONO BOMBY WODNE: " << foundBombsAmt << endl;
+        player.waterBomb_amt += foundBombsAmt;
     }
     player.max_health += 25;
     cout << "[ZWIEKSZONO MAKSYMALNE ZDROWIE DO "<< player.max_health << "]" << endl;
     cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
-    char c;
-    cin >> c;
+    cin.ignore();
+    cin.get();
 
 
     if (player.waterBomb_lvl == 0){
@@ -791,7 +793,8 @@ void SCMission1(Firefighter &player){
                                "Obrazenia jakie zadaja sa zalezne od stanu zdrowia przeciwnika. "
                                "Kilka takich sztuk wystarczy, aby oslabic bestie i dobic salwa z gasnicy. ");
         cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
-        cin >> c;
+        cin.ignore();
+        cin.get();
         sleep(2000);
     }
 
@@ -878,14 +881,14 @@ void SCMission2(Firefighter &player){
 
         int foundBombsAmt = dis2(gen);
         cout << "[+] ZNALEZIONO BOMBY WODNE: " << foundBombsAmt << endl;
-
+        player.waterBomb_amt += foundBombsAmt;
     }
     player.max_health += 20;
     cout << "[ZWIEKSZONO MAKSYMALNE ZDROWIE DO "<< player.max_health << "]" << endl;
     cout << "Nacisnij ENTER, aby kontynuowac..." << endl;
     player.experience += 190;
-    char c;
-    cin >> c;
+    cin.ignore();
+    cin.get();
 
     if (player.extinguisher_lvl == 1){
         sleep(2000);
@@ -1127,7 +1130,7 @@ int main() {
     Dragon Burzogniew("BURZOGNIEW",100,50);
     Dragon Pyros("PYROS",500,60);
     Dragon Zguba_Miast("ZGUBA MIAST",700,80);
-    Dragon Wladca_Zaru("WLADCA ZARU", 1200, 120);
+    Dragon Wladca_Zaru("WLADCA ZARU", 1200, 210);
 
     Firefighter player;
 
@@ -1212,9 +1215,9 @@ int main() {
             cout << "Dowodca Strazakow Samuel: ";
             print_letter_by_letter("Ach tak? To w takim razie moze powiedz jak Ci na imie swiezy?");
             cout << "Twoja odpowiedz: (NIE WPISUJ SPACJI)";
-            cin >> player.name;
-            //getline(cin, player.name);
-            // cout << player.name;
+            cin.ignore();
+            getline(cin, player.name);
+            cout << player.name;
             cout << "Dowodca Strazakow Samuel: ";
             print_letter_by_letter("Milo Cie poznac " + player.name + ". Franek dokonczyl twoje szkolenie? "
                                                                       "Jeden problem rozwiazany, ale nie mozemy teraz spoczac na laurach. "
