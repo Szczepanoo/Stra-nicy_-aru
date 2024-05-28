@@ -1267,9 +1267,7 @@ int main() {
             cout << "Dowodca Strazakow Samuel: ";
             print_letter_by_letter("Ach tak? To w takim razie moze powiedz jak Ci na imie swiezy?");
             cout << "Twoja odpowiedz: (NIE WPISUJ SPACJI)";
-            cin.ignore();
             getline(cin, player.name);
-            cout << player.name;
             cout << "Dowodca Strazakow Samuel: ";
             print_letter_by_letter("Milo Cie poznac " + player.name + ". Franek dokonczyl twoje szkolenie? "
                                                                       "Jeden problem rozwiazany, ale nie mozemy teraz spoczac na laurach. "
